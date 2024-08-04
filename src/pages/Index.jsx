@@ -11,6 +11,7 @@ import { motion } from 'framer-motion';
 const Index = () => {
   const [userId, setUserId] = useState('333e05cd-70b9-4455-b15c-928c890bdd02'); // Default to Marius Wilsch's ID
   const [expandedMatchId, setExpandedMatchId] = useState(null);
+  const [isFirstLoad, setIsFirstLoad] = useState(true);
 
   const { data: user, isLoading: userLoading, error: userError } = useUserMatchmaker(userId);
   const { data: matches, isLoading: matchesLoading, error: matchesError } = useGetMatchesByUserId(userId);
@@ -32,6 +33,12 @@ const Index = () => {
       setExpandedMatchId(matches[0].id);
     }
   }, [matches, expandedMatchId]);
+
+  useEffect(() => {
+    if (!userLoading && !matchesLoading) {
+      setTimeout(() => setIsFirstLoad(false), 1000); // Delay to ensure animations are visible
+    }
+  }, [userLoading, matchesLoading]);
 
   const handleExpand = (matchId) => {
     setExpandedMatchId(matchId === expandedMatchId ? null : matchId);
@@ -60,7 +67,12 @@ const Index = () => {
       {/* Main content */}
       <div className="flex flex-1 p-4">
         {/* Left sidebar - User Profile */}
-        <div className="w-[30%] mr-4 space-y-4">
+        <motion.div 
+          className="w-[30%] mr-4 space-y-4"
+          initial={isFirstLoad ? { x: -300, opacity: 0 } : false}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
+        >
           {userLoading ? (
             <div>Loading user profile...</div>
           ) : userError ? (
@@ -123,20 +135,31 @@ const Index = () => {
         </div>
 
         {/* Main content area - Matches */}
-        <div className="w-[70%]">
-          {matches && matches.length > 0 ? matches.map((match) => (
-            <MatchCard
+        <motion.div 
+          className="w-[70%]"
+          initial={isFirstLoad ? { x: 300, opacity: 0 } : false}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{ duration: 0.5, ease: "easeOut", delay: 0.2 }}
+        >
+          {matches && matches.length > 0 ? matches.map((match, index) => (
+            <motion.div
               key={match.id}
-              match={match}
-              isExpanded={match.id === expandedMatchId}
-              onExpand={() => handleExpand(match.id)}
-            />
+              initial={isFirstLoad ? { y: 50, opacity: 0 } : false}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.3, delay: 0.1 * index }}
+            >
+              <MatchCard
+                match={match}
+                isExpanded={match.id === expandedMatchId}
+                onExpand={() => handleExpand(match.id)}
+              />
+            </motion.div>
           )) : (
             <div className="text-center py-8">
               <p className="text-lg text-gray-600">No matches found for this user.</p>
             </div>
           )}
-        </div>
+        </motion.div>
       </div>
 
       {/* Footer */}
