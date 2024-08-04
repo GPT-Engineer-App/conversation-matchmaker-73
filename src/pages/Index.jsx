@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
+import { Maximize2 } from 'lucide-react';
 import { useUserMatchmaker, useGetMatchesByUserId, useMatchedUserDetails, useMatchesSubscription } from '@/integrations/supabase';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -76,7 +77,21 @@ const Index = () => {
             <div>Error loading user: {userError.message}</div>
           ) : user ? (
             <>
-              <Card className="p-4 shadow-lg bg-white rounded-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:scale-105 border border-gray-200 hover:border-gray-300">
+              <Card className="p-4 shadow-lg bg-white rounded-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:scale-105 border border-gray-200 hover:border-gray-300 relative">
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button variant="ghost" size="icon" className="absolute top-2 right-2 hover:bg-gray-100">
+                      <Maximize2 className="h-4 w-4" />
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="w-11/12 max-w-4xl h-[90vh] max-h-[90vh]">
+                    <ScrollArea className="h-full pr-4">
+                      <div className="p-6">
+                        <ExpandedProfileContent user={user} />
+                      </div>
+                    </ScrollArea>
+                  </DialogContent>
+                </Dialog>
                 <div className="flex flex-col items-center">
                   <Avatar className="w-24 h-24 mb-2">
                     <AvatarImage src={user.image_url || "/placeholder.svg"} alt={user.name} />
@@ -123,19 +138,6 @@ const Index = () => {
                   <a href={user.company_linkedin} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Company Page</a>
                 </div>
               </Card>
-              
-              <Dialog>
-                <DialogTrigger asChild>
-                  <Button className="w-full bg-blue-950 text-white hover:bg-blue-900">Expand Profile</Button>
-                </DialogTrigger>
-                <DialogContent className="w-11/12 max-w-4xl h-[90vh] max-h-[90vh]">
-                  <ScrollArea className="h-full pr-4">
-                    <div className="p-6">
-                      <ExpandedProfileContent user={user} />
-                    </div>
-                  </ScrollArea>
-                </DialogContent>
-              </Dialog>
             </>
           ) : (
             <div>User not found</div>
