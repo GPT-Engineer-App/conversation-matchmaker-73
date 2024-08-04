@@ -120,7 +120,18 @@ const Index = () => {
                 </div>
               </Card>
               
-              <Button className="w-full bg-blue-950 text-white hover:bg-blue-900">Expand Profile</Button>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button className="w-full bg-blue-950 text-white hover:bg-blue-900">Expand Profile</Button>
+                </DialogTrigger>
+                <DialogContent className="w-11/12 max-w-4xl h-[90vh] max-h-[90vh]">
+                  <ScrollArea className="h-full pr-4">
+                    <div className="p-6">
+                      <ExpandedProfileContent user={user} />
+                    </div>
+                  </ScrollArea>
+                </DialogContent>
+              </Dialog>
             </>
           ) : (
             <div>User not found</div>
@@ -334,5 +345,72 @@ const MatchCard = ({ match, isExpanded, onExpand }) => {
         </div>
       </div>
     </Card>
+  );
+};
+
+const ExpandedProfileContent = ({ user }) => {
+  const additionalInfo = [
+    { label: 'Areas of Expertise', value: user.areas_of_expertise },
+    { label: 'Skills', value: user.skills },
+    { label: 'Key Projects', value: user.key_projects },
+    { label: 'AI Technologies Used', value: user.ai_technologies_used },
+    { label: 'Business Goals', value: user.business_goals },
+    { label: 'Challenges Faced', value: user.challenges_faced },
+    { label: 'Interests', value: user.interests },
+    { label: 'Networking Notes', value: user.networking_notes },
+    { label: 'Partnership Potential', value: user.partnership_potential },
+    { label: 'AAA Advice', value: user.aaa_advice },
+    { label: 'Follow-up Actions', value: user.follow_up_actions },
+    { label: 'Job History', value: user.job_history },
+    { label: 'Education', value: user.education },
+    { label: 'AI Solution Offerings', value: user.ai_solution_offerings },
+    { label: 'Target Market', value: user.target_market },
+    { label: 'Revenue Model', value: user.revenue_model },
+    { label: 'Team Size', value: user.team_size },
+    { label: 'Funding Status', value: user.funding_status },
+    { label: 'Tech Stack', value: user.tech_stack },
+    { label: 'Data Privacy Approach', value: user.data_privacy_approach },
+    { label: 'Scalability Strategy', value: user.scalability_strategy },
+    { label: 'Competitive Advantage', value: user.competitive_advantage },
+    { label: 'Potential Collaboration Areas', value: user.potential_collaboration_areas },
+    { label: 'Next Milestones', value: user.next_milestones },
+    { label: 'Personal Motivation', value: user.personal_motivation },
+    { label: 'Networking Preferences', value: user.networking_preferences },
+    { label: 'Content Creation', value: user.content_creation },
+    { label: 'Community Involvement', value: user.community_involvement },
+    { label: 'Mentoring Interests', value: user.mentoring_interests },
+    { label: 'Skills to Acquire', value: user.skills_to_acquire },
+    { label: 'Resources Needed', value: user.resources_needed },
+    { label: 'Success Metrics', value: user.success_metrics },
+    { label: 'Long Term Vision', value: user.long_term_vision },
+    { label: 'Best Practices', value: user.best_practices },
+    { label: 'Career Stage', value: user.career_stage },
+    { label: 'Preferred Communication', value: user.preferred_communication },
+  ];
+
+  const renderInfoBox = (title, items) => (
+    <div className="bg-white p-6 rounded-lg shadow-lg mb-6 border border-gray-200 transition-all duration-300 ease-in-out hover:shadow-xl hover:scale-105 w-full">
+      <h3 className="text-xl font-semibold mb-4 text-blue-700">{title}</h3>
+      {items.map(({ label, value }) => {
+        if (value && (!Array.isArray(value) || value.length > 0)) {
+          return (
+            <div key={label} className="mb-3">
+              <div className="font-medium">{label}</div>
+              <div className="bg-gray-100 rounded-md p-2 mt-1">
+                {Array.isArray(value) ? value.join(', ') : value}
+              </div>
+            </div>
+          );
+        }
+        return null;
+      })}
+    </div>
+  );
+
+  return (
+    <div className="space-y-4">
+      <h2 className="text-2xl font-bold mb-4">{user.name}'s Expanded Profile</h2>
+      {renderInfoBox('Additional Information', additionalInfo)}
+    </div>
   );
 };
