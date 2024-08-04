@@ -72,23 +72,28 @@ const Index = () => {
           {/* Match summaries */}
           {userMatches.map((match) => (
             <Card key={match.id} className="mb-4 p-4">
-              <div className="flex items-center mb-4">
-                <Avatar className="w-16 h-16 mr-4">
-                  <AvatarImage src={match.matched_user_image || "/placeholder.svg"} alt={match.matched_user_name} />
-                  <AvatarFallback>{match.matched_user_name?.charAt(0) || 'U'}</AvatarFallback>
-                </Avatar>
-                <div>
-                  <h2 className="text-lg font-semibold">{match.matched_user_name}</h2>
-                  <p className="text-sm text-gray-600">Match Score: {match.matching_score}/10</p>
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center">
+                  <Avatar className="w-16 h-16 mr-4">
+                    <AvatarImage src={match.matched_user_image || "/placeholder.svg"} alt={match.matched_user_name} />
+                    <AvatarFallback>{match.matched_user_name?.charAt(0) || 'U'}</AvatarFallback>
+                  </Avatar>
+                  <div>
+                    <h2 className="text-lg font-semibold">{match.matched_user_name}</h2>
+                    <p className="text-sm text-gray-600">{match.current_title}</p>
+                    <p className="text-sm text-gray-600">{match.company_name}</p>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <p className="text-lg font-bold text-blue-600">Match Score: {match.matching_score}/10</p>
+                  <p className="text-sm text-gray-600">{match.location}</p>
                 </div>
               </div>
-              <p className="mb-2"><strong>Explanation:</strong> {match.explanation}</p>
-              <p className="mb-2"><strong>Potential Collaboration:</strong> {match.potential_collaboration}</p>
-              <p className="mb-2"><strong>Shared Interests:</strong> {match.shared_interests?.join(', ')}</p>
-              <p className="mb-2"><strong>Geographical Synergy:</strong> {match.geographical_synergy}</p>
-              <p className="mb-2"><strong>Experience Level:</strong> {match.experience_level}</p>
-              <p className="mb-2"><strong>Communication Compatibility:</strong> {match.communication_compatibility}</p>
+              <p className="mb-2 text-sm"><strong>Industry:</strong> {match.industry}</p>
+              <p className="mb-2 text-sm"><strong>Expertise:</strong> {match.areas_of_expertise?.slice(0, 3).join(', ')}</p>
+              <p className="mb-2"><strong>Why it's a good match:</strong> {match.explanation}</p>
               <div className="flex justify-end mt-4">
+                <Button size="sm" className="mr-2">View Full Profile</Button>
                 <Button size="sm" className="mr-2">Connect</Button>
                 <Button size="sm" variant="outline" as="a" href={match.matched_user_linkedin} target="_blank" rel="noopener noreferrer">LinkedIn Profile</Button>
               </div>
