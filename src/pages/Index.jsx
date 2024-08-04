@@ -7,6 +7,7 @@ import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Input } from '@/components/ui/input';
 import { motion } from 'framer-motion';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const Index = () => {
   const [expandedMatchId, setExpandedMatchId] = useState(null);
@@ -179,6 +180,32 @@ const Index = () => {
   );
 };
 
+const MatchCardSkeleton = () => (
+  <Card className="mb-4 overflow-hidden border border-gray-200">
+    <div className="p-4">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center">
+          <Skeleton className="w-16 h-16 rounded-full mr-4" />
+          <div>
+            <Skeleton className="h-6 w-32 mb-2" />
+            <Skeleton className="h-4 w-24" />
+            <Skeleton className="h-4 w-28 mt-1" />
+          </div>
+        </div>
+        <div className="text-right">
+          <Skeleton className="h-8 w-16 mb-1" />
+          <Skeleton className="h-4 w-20" />
+          <Skeleton className="h-4 w-24 mt-1" />
+        </div>
+      </div>
+      <div className="mt-4">
+        <Skeleton className="h-4 w-full mb-2" />
+        <Skeleton className="h-4 w-3/4" />
+      </div>
+    </div>
+  </Card>
+);
+
 export default Index;
 
 
@@ -244,6 +271,7 @@ const FullProfileContent = ({ match, matchedUserDetails }) => {
 
 const MatchCard = ({ match, isExpanded, onExpand }) => {
   const [isContentVisible, setIsContentVisible] = React.useState(isExpanded);
+  const [isUpdating, setIsUpdating] = React.useState(false);
   const { data: matchedUserDetails, isLoading: isLoadingDetails } = useMatchedUserDetails(match.matched_user_id);
 
   React.useEffect(() => {
@@ -256,8 +284,18 @@ const MatchCard = ({ match, isExpanded, onExpand }) => {
     return () => clearTimeout(timeoutId);
   }, [isExpanded]);
 
-  if (isLoadingDetails) {
-    return <div>Loading match details...</div>;
+  React.useEffect(() => {
+    if (isLoadingDetails) {
+      setIsUpdating(true);
+    } else {
+      // Simulate a short delay to show the skeleton
+      const timer = setTimeout(() => setIsUpdating(false), 500);
+      return () => clearTimeout(timer);
+    }
+  }, [isLoadingDetails]);
+
+  if (isUpdating) {
+    return <MatchCardSkeleton />;
   }
 
   const handleCardClick = (e) => {
