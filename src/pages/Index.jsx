@@ -35,54 +35,34 @@ const Index = () => {
       <div className="flex flex-1 p-4">
         {/* Left sidebar - User Profile */}
         <div className="w-[25%] mr-4 space-y-4">
-          {/* ProfileHeader */}
           <Card className="p-4 shadow-lg bg-white rounded-lg">
             <div className="flex flex-col items-center">
-              <Avatar className="w-32 h-32 mb-2">
+              <Avatar className="w-24 h-24 mb-2">
                 <AvatarImage src={user.image_url || "/placeholder.svg"} alt={user.name} />
                 <AvatarFallback>{user.name?.charAt(0) || 'U'}</AvatarFallback>
               </Avatar>
               <h2 className="text-xl font-semibold">{user.name}</h2>
-              <p className="text-sm text-gray-600">{user.current_title}</p>
+              <p className="text-sm text-gray-600 text-center mt-2">{user.current_title}</p>
             </div>
           </Card>
           
-          {/* CompanyInfo */}
           <Card className="p-4 shadow-lg bg-white rounded-lg">
             <p><span className="font-semibold">Company:</span> {user.company_name || 'Veloxforce'}</p>
+            <p><span className="font-semibold">Location:</span> {user.location || 'Munich, Bavaria, Germany'}</p>
+            <p><span className="font-semibold">Industry:</span> {user.industry || 'AI/Software'}</p>
+          </Card>
+          
+          <Card className="p-4 shadow-lg bg-white rounded-lg">
+            <p><span className="font-semibold">Email:</span> {user.main_email}</p>
+            <p><span className="font-semibold">LinkedIn:</span> <a href={user.linkedin_url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Profile</a></p>
+          </Card>
+          
+          <Card className="p-4 shadow-lg bg-white rounded-lg">
             <p><span className="font-semibold">Website:</span> <a href={user.company_website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Veloxforce</a></p>
-            <p><span className="font-semibold">Company LinkedIn:</span> <a href={user.company_linkedin} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Company Page</a></p>
+            <p><span className="font-semibold">LinkedIn:</span> <a href={user.company_linkedin} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Company Page</a></p>
           </Card>
           
-          {/* ContactDetails */}
-          <Card className="p-4 shadow-lg bg-white rounded-lg">
-            <p>{user.main_email}</p>
-            <p>{user.phone_number}</p>
-            <p>{user.location}</p>
-            <p><a href={user.linkedin_url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">LinkedIn Profile</a></p>
-          </Card>
-          
-          {/* SkillsDisplay */}
-          <Card className="p-4 shadow-lg bg-white rounded-lg">
-            <div className="mb-2">
-              <h4 className="font-semibold">Key Skills:</h4>
-              <ul className="list-disc list-inside">
-                {user.skills?.slice(0, 5).map((skill, index) => (
-                  <li key={index}>{skill}</li>
-                ))}
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold">Areas of Expertise:</h4>
-              <ul className="list-disc list-inside">
-                {user.areas_of_expertise?.slice(0, 5).map((area, index) => (
-                  <li key={index}>{area}</li>
-                ))}
-              </ul>
-            </div>
-          </Card>
-          
-          <Button className="w-full">Expand Profile</Button>
+          <Button className="w-full bg-indigo-900 text-white hover:bg-indigo-800">Expand Profile</Button>
         </div>
 
         {/* Main content area - Matches */}
