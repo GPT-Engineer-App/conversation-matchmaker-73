@@ -1,5 +1,11 @@
-import { createClient } from '@supabase/supabase-js';
-import { useQuery, useMutation, useQueryClient, QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { createClient } from "@supabase/supabase-js";
+import {
+  useQuery,
+  useMutation,
+  useQueryClient,
+  QueryClient,
+  QueryClientProvider,
+} from "@tanstack/react-query";
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_PROJECT_URL;
 const supabaseKey = import.meta.env.VITE_SUPABASE_API_KEY;
@@ -8,13 +14,17 @@ export const supabase = createClient(supabaseUrl, supabaseKey);
 import React from "react";
 export const queryClient = new QueryClient();
 export function SupabaseProvider({ children }) {
-    return React.createElement(QueryClientProvider, { client: queryClient }, children);
+  return React.createElement(
+    QueryClientProvider,
+    { client: queryClient },
+    children
+  );
 }
 
 const fromSupabase = async (query) => {
-    const { data, error } = await query;
-    if (error) throw new Error(error.message);
-    return data;
+  const { data, error } = await query;
+  if (error) throw new Error(error.message);
+  return data;
 };
 
 /* supabase integration types
@@ -93,99 +103,147 @@ const fromSupabase = async (query) => {
 */
 
 // Matches Matchmaker
-export const useMatches = () => useQuery({
-    queryKey: ['matches'],
-    queryFn: () => fromSupabase(supabase.from('matches_matchmaker').select('*'))
-});
+export const useMatches = () =>
+  useQuery({
+    queryKey: ["matches"],
+    queryFn: () =>
+      fromSupabase(supabase.from("matches_matchmaker").select("*")),
+  });
 
-export const useMatch = (matchId) => useQuery({
-    queryKey: ['matches', matchId],
-    queryFn: () => fromSupabase(supabase.from('matches_matchmaker').select('*').eq('id', matchId).single())
-});
+export const useMatch = (matchId) =>
+  useQuery({
+    queryKey: ["matches", matchId],
+    queryFn: () =>
+      fromSupabase(
+        supabase
+          .from("matches_matchmaker")
+          .select("*")
+          .eq("id", matchId)
+          .single()
+      ),
+  });
 
 export const useAddMatch = () => {
-    const queryClient = useQueryClient();
-    return useMutation({
-        mutationFn: (newMatch) => fromSupabase(supabase.from('matches_matchmaker').insert([newMatch])),
-        onSuccess: () => {
-            queryClient.invalidateQueries('matches');
-        },
-    });
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (newMatch) =>
+      fromSupabase(supabase.from("matches_matchmaker").insert([newMatch])),
+    onSuccess: () => {
+      queryClient.invalidateQueries("matches");
+    },
+  });
 };
 
 export const useUpdateMatch = () => {
-    const queryClient = useQueryClient();
-    return useMutation({
-        mutationFn: ({ matchId, updates }) => fromSupabase(supabase.from('matches_matchmaker').update(updates).eq('id', matchId)),
-        onSuccess: () => {
-            queryClient.invalidateQueries('matches');
-        },
-    });
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ matchId, updates }) =>
+      fromSupabase(
+        supabase.from("matches_matchmaker").update(updates).eq("id", matchId)
+      ),
+    onSuccess: () => {
+      queryClient.invalidateQueries("matches");
+    },
+  });
 };
 
 export const useDeleteMatch = () => {
-    const queryClient = useQueryClient();
-    return useMutation({
-        mutationFn: (matchId) => fromSupabase(supabase.from('matches_matchmaker').delete().eq('id', matchId)),
-        onSuccess: () => {
-            queryClient.invalidateQueries('matches');
-        },
-    });
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (matchId) =>
+      fromSupabase(
+        supabase.from("matches_matchmaker").delete().eq("id", matchId)
+      ),
+    onSuccess: () => {
+      queryClient.invalidateQueries("matches");
+    },
+  });
 };
 
 // Users Matchmakers
-export const useUsersMatchmakers = () => useQuery({
-    queryKey: ['users_matchmakers'],
-    queryFn: () => fromSupabase(supabase.from('users_matchmakers').select('*'))
-});
+export const useUsersMatchmakers = () =>
+  useQuery({
+    queryKey: ["users_matchmakers"],
+    queryFn: () => fromSupabase(supabase.from("users_matchmakers").select("*")),
+  });
 
-export const useUserMatchmaker = (userId) => useQuery({
-    queryKey: ['users_matchmakers', userId],
-    queryFn: () => fromSupabase(supabase.from('users_matchmakers').select('*').eq('id', userId).single())
-});
+export const useUserMatchmaker = (userId) =>
+  useQuery({
+    queryKey: ["users_matchmakers", userId],
+    queryFn: () =>
+      fromSupabase(
+        supabase.from("users_matchmakers").select("*").eq("id", userId).single()
+      ),
+  });
 
 export const useAddUserMatchmaker = () => {
-    const queryClient = useQueryClient();
-    return useMutation({
-        mutationFn: (newUser) => fromSupabase(supabase.from('users_matchmakers').insert([newUser])),
-        onSuccess: () => {
-            queryClient.invalidateQueries('users_matchmakers');
-        },
-    });
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (newUser) =>
+      fromSupabase(supabase.from("users_matchmakers").insert([newUser])),
+    onSuccess: () => {
+      queryClient.invalidateQueries("users_matchmakers");
+    },
+  });
 };
 
 export const useUpdateUserMatchmaker = () => {
-    const queryClient = useQueryClient();
-    return useMutation({
-        mutationFn: ({ userId, updates }) => fromSupabase(supabase.from('users_matchmakers').update(updates).eq('id', userId)),
-        onSuccess: () => {
-            queryClient.invalidateQueries('users_matchmakers');
-        },
-    });
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ userId, updates }) =>
+      fromSupabase(
+        supabase.from("users_matchmakers").update(updates).eq("id", userId)
+      ),
+    onSuccess: () => {
+      queryClient.invalidateQueries("users_matchmakers");
+    },
+  });
 };
 
 export const useDeleteUserMatchmaker = () => {
-    const queryClient = useQueryClient();
-    return useMutation({
-        mutationFn: (userId) => fromSupabase(supabase.from('users_matchmakers').delete().eq('id', userId)),
-        onSuccess: () => {
-            queryClient.invalidateQueries('users_matchmakers');
-        },
-    });
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (userId) =>
+      fromSupabase(
+        supabase.from("users_matchmakers").delete().eq("id", userId)
+      ),
+    onSuccess: () => {
+      queryClient.invalidateQueries("users_matchmakers");
+    },
+  });
 };
 
 // Additional custom hooks
-export const useGetMatchesByUserId = (userId) => useQuery({
-    queryKey: ['matches', userId],
+export const useGetMatchesByUserId = (userId) =>
+  useQuery({
+    queryKey: ["matches", userId],
     queryFn: async () => {
-        const { data, error } = await supabase
-            .from('matches_matchmaker')
-            .select(`
+      const { data, error } = await supabase
+        .from("matches_matchmaker")
+        .select(
+          `
                 *,
                 matched_user:users_matchmakers!matched_user_id(*)
-            `)
-            .eq('user_id', userId);
-        if (error) throw new Error(error.message);
-        return data;
-    }
-});
+            `
+        )
+        .eq("user_id", userId);
+      if (error) throw new Error(error.message);
+      return data;
+    },
+  });
+
+export const useMatchedUserDetails = (matchedUserId) =>
+  useQuery({
+    queryKey: ["matched_user_details", matchedUserId],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("users_matchmakers")
+        .select("*")
+        .eq("id", matchedUserId)
+        .single();
+
+      if (error) throw new Error(error.message);
+      return data;
+    },
+    enabled: !!matchedUserId,
+  });
