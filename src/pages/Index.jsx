@@ -120,11 +120,11 @@ const Index = () => {
               <Card className="p-4 shadow-lg bg-white rounded-lg space-y-4 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:scale-105 border border-gray-200 hover:border-gray-300">
                 <div>
                   <p className="font-semibold">Email</p>
-                  <p>{user.main_email}</p>
+                  <p className="break-words">{user.main_email}</p>
                 </div>
                 <div>
                   <p className="font-semibold">LinkedIn</p>
-                  <a href={user.linkedin_url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Profile</a>
+                  <a href={user.linkedin_url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline break-words">Profile</a>
                 </div>
               </Card>
               
