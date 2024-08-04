@@ -1,21 +1,15 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useUserMatchmaker, useMatches, useUsersMatchmakers } from '@/integrations/supabase';
-import { ChevronDown, ChevronUp } from 'lucide-react';
 
 const Index = () => {
   const userId = '333e05cd-70b9-4455-b15c-928c890bdd02'; // Marius Wilsch's ID
   const { data: user, isLoading: userLoading, error: userError } = useUserMatchmaker(userId);
   const { data: matches, isLoading: matchesLoading, error: matchesError } = useMatches();
   const { data: allUsers, isLoading: allUsersLoading, error: allUsersError } = useUsersMatchmakers();
-  const [expandedMatchId, setExpandedMatchId] = useState(null);
-
-  const toggleExpand = (matchId) => {
-    setExpandedMatchId(expandedMatchId === matchId ? null : matchId);
-  };
 
   if (userLoading || matchesLoading || allUsersLoading) return <div>Loading...</div>;
   if (userError) return <div>Error loading user: {userError.message}</div>;
@@ -39,7 +33,7 @@ const Index = () => {
       {/* Main content */}
       <div className="flex flex-1 p-4">
         {/* Left sidebar */}
-        <div className="w-[30%] mr-4">
+        <div className="w-[20%] mr-4">
           <div className="flex flex-col items-center mb-4">
             <Avatar className="w-32 h-32 mb-2">
               <AvatarImage src={user.image_url || "/placeholder.svg"} alt={user.name} />
@@ -72,7 +66,7 @@ const Index = () => {
         </div>
 
         {/* Main content area */}
-        <div className="w-[70%]">
+        <div className="w-[80%]">
           <Tabs defaultValue="list" className="mb-4">
             <TabsList>
               <TabsTrigger value="list">List View</TabsTrigger>
@@ -101,22 +95,10 @@ const Index = () => {
                   <p className="text-sm text-gray-600">{match.matchedUserDetails?.location}</p>
                 </div>
               </div>
-              <Button 
-                onClick={() => toggleExpand(match.id)} 
-                variant="ghost" 
-                className="w-full flex justify-between items-center mb-2"
-              >
-                {expandedMatchId === match.id ? 'Hide Details' : 'Show Details'}
-                {expandedMatchId === match.id ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
-              </Button>
-              {expandedMatchId === match.id && (
-                <>
-                  <p className="mb-2 font-semibold">Potential Collaboration</p>
-                  <p className="mb-4">{match.potential_collaboration}</p>
-                  <p className="mb-2 font-semibold">Explanation</p>
-                  <p className="mb-4">{match.explanation}</p>
-                </>
-              )}
+              <p className="mb-2 font-semibold">Potential Collaboration</p>
+              <p className="mb-4">{match.potential_collaboration}</p>
+              <p className="mb-2 font-semibold">Explanation</p>
+              <p className="mb-4">{match.explanation}</p>
               <div className="flex justify-end mt-4">
                 <Button size="sm" className="mr-2">View Full Profile</Button>
                 <Button size="sm" className="mr-2">Connect</Button>
