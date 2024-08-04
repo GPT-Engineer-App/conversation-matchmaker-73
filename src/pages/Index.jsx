@@ -35,7 +35,7 @@ const Index = () => {
       <div className="flex flex-1 p-4">
         {/* Left sidebar - User Profile */}
         <div className="w-[25%] mr-4 space-y-4">
-          <Card className="p-4 shadow-lg bg-white rounded-lg transform hover:scale-105 transition-transform duration-300 hover:shadow-xl" style={{ boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1), 0 5px 15px rgba(0, 0, 0, 0.1)' }}>
+          <Card className="p-4 shadow-lg bg-white rounded-lg">
             <div className="flex flex-col items-center">
               <Avatar className="w-24 h-24 mb-2">
                 <AvatarImage src={user.image_url || "/placeholder.svg"} alt={user.name} />
@@ -46,7 +46,7 @@ const Index = () => {
             </div>
           </Card>
           
-          <Card className="p-4 shadow-lg bg-white rounded-lg space-y-4 transform hover:scale-105 transition-transform duration-300 hover:shadow-xl" style={{ boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1), 0 5px 15px rgba(0, 0, 0, 0.1)' }}>
+          <Card className="p-4 shadow-lg bg-white rounded-lg space-y-4">
             <div>
               <p className="font-semibold">Company</p>
               <p>{user.company_name || 'Veloxforce'}</p>
@@ -61,7 +61,7 @@ const Index = () => {
             </div>
           </Card>
           
-          <Card className="p-4 shadow-lg bg-white rounded-lg space-y-4 transform hover:scale-105 transition-transform duration-300 hover:shadow-xl" style={{ boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1), 0 5px 15px rgba(0, 0, 0, 0.1)' }}>
+          <Card className="p-4 shadow-lg bg-white rounded-lg space-y-4">
             <div>
               <p className="font-semibold">Email</p>
               <p>{user.main_email}</p>
