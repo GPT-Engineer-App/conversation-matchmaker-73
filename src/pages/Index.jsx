@@ -17,8 +17,7 @@ const Index = () => {
       {/* Header */}
       <header className="bg-white p-4 shadow-sm">
         <div className="flex items-center">
-          <div className="w-8 h-8 bg-gray-300 rounded-full mr-2"></div>
-          <span className="text-lg font-semibold">Logo here</span>
+          <span className="text-xl font-bold text-blue-600">MatchMaker</span>
         </div>
       </header>
 
