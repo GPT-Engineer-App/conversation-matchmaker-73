@@ -33,41 +33,43 @@ const Index = () => {
 
       {/* Main content */}
       <div className="flex flex-1 p-4">
-        {/* Left sidebar */}
-        <div className="w-[20%] mr-4">
-          <div className="flex flex-col items-center mb-4">
-            <Avatar className="w-32 h-32 mb-2">
-              <AvatarImage src={user.image_url || "/placeholder.svg"} alt={user.name} />
-              <AvatarFallback>{user.name?.charAt(0) || 'U'}</AvatarFallback>
-            </Avatar>
-            <h2 className="text-xl font-semibold">{user.name}</h2>
-            <p className="text-sm text-gray-600">{user.current_title}</p>
-          </div>
-          <Card className="mb-4 p-4 shadow-lg transform hover:scale-105 transition-transform duration-300 bg-white rounded-lg">
-            <p className="font-bold">Company:</p>
-            <p>{user.company_name || 'Veloxforce'}</p>
-            <p className="font-bold mt-2">Location:</p>
-            <p>{user.location}</p>
-            <p className="font-bold mt-2">Industry:</p>
-            <p>{user.industry || 'AI/Software'}</p>
+        {/* Left sidebar - User Profile */}
+        <div className="w-[30%] mr-4">
+          <Card className="p-4 shadow-lg bg-white rounded-lg">
+            <div className="flex flex-col items-center mb-4">
+              <Avatar className="w-32 h-32 mb-2">
+                <AvatarImage src={user.image_url || "/placeholder.svg"} alt={user.name} />
+                <AvatarFallback>{user.name?.charAt(0) || 'U'}</AvatarFallback>
+              </Avatar>
+              <h2 className="text-xl font-semibold">{user.name}</h2>
+              <p className="text-sm text-gray-600">{user.current_title}</p>
+            </div>
+            <div className="mb-4">
+              <p className="font-bold">Company:</p>
+              <p>{user.company_name || 'Veloxforce'}</p>
+              <p className="font-bold mt-2">Location:</p>
+              <p>{user.location}</p>
+              <p className="font-bold mt-2">Industry:</p>
+              <p>{user.industry || 'AI/Software'}</p>
+            </div>
+            <div className="mb-4">
+              <p className="font-bold">Email:</p>
+              <p>{user.main_email}</p>
+              <p className="font-bold mt-2">LinkedIn:</p>
+              <p><a href={user.linkedin_url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Profile</a></p>
+            </div>
+            <div className="mb-4">
+              <p className="font-bold">Website:</p>
+              <p><a href={user.company_website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Veloxforce</a></p>
+              <p className="font-bold mt-2">Company LinkedIn:</p>
+              <p><a href={user.company_linkedin} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Company Page</a></p>
+            </div>
+            <Button className="w-full">Expand Profile</Button>
           </Card>
-          <Card className="mb-4 p-4 shadow-lg transform hover:scale-105 transition-transform duration-300 bg-white rounded-lg">
-            <p className="font-bold">Email:</p>
-            <p>{user.main_email}</p>
-            <p className="font-bold mt-2">LinkedIn:</p>
-            <p><a href={user.linkedin_url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Profile</a></p>
-          </Card>
-          <Card className="mb-4 p-4 shadow-lg transform hover:scale-105 transition-transform duration-300 bg-white rounded-lg">
-            <p className="font-bold">Website:</p>
-            <p><a href={user.company_website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Veloxforce</a></p>
-            <p className="font-bold mt-2">LinkedIn:</p>
-            <p><a href={user.company_linkedin} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Company Page</a></p>
-          </Card>
-          <Button className="w-full">Expand Profile</Button>
         </div>
 
-        {/* Main content area */}
-        <div className="w-[80%]">
+        {/* Main content area - Matches */}
+        <div className="w-[70%]">
           <Tabs defaultValue="list" className="mb-4">
             <TabsList>
               <TabsTrigger value="list">List View</TabsTrigger>
