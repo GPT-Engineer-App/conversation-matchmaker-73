@@ -310,21 +310,24 @@ const MatchCard = ({ match, isExpanded, onExpand }) => {
                   <p className="mb-4">{matchedUserDetails.ai_technologies_used.join(', ')}</p>
                 </>
               )}
-              <div className="flex justify-end mt-4">
-                <Dialog>
-                  <DialogTrigger asChild>
-                    <Button size="sm" className="mr-2" onClick={(e) => e.stopPropagation()}>View Full Profile</Button>
-                  </DialogTrigger>
-                  <DialogContent className="w-11/12 max-w-4xl h-[90vh] max-h-[90vh]">
-                    <ScrollArea className="h-full pr-4">
-                      <div className="p-6">
-                        <FullProfileContent match={match} matchedUserDetails={matchedUserDetails} />
-                      </div>
-                    </ScrollArea>
-                  </DialogContent>
-                </Dialog>
-                <Button size="sm" className="mr-2" onClick={(e) => e.stopPropagation()}>Connect</Button>
-                <Button size="sm" variant="outline" as="a" href={matchedUserDetails?.linkedin_url} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}>LinkedIn Profile</Button>
+              <div className="mt-4">
+                <hr className="border-t border-gray-200 mb-4" />
+                <div className="flex justify-start space-x-2">
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button size="sm" onClick={(e) => e.stopPropagation()}>View Full Profile</Button>
+                    </DialogTrigger>
+                    <DialogContent className="w-11/12 max-w-4xl h-[90vh] max-h-[90vh]">
+                      <ScrollArea className="h-full pr-4">
+                        <div className="p-6">
+                          <FullProfileContent match={match} matchedUserDetails={matchedUserDetails} />
+                        </div>
+                      </ScrollArea>
+                    </DialogContent>
+                  </Dialog>
+                  <Button size="sm" onClick={(e) => e.stopPropagation()}>Connect</Button>
+                  <Button size="sm" variant="outline" as="a" href={matchedUserDetails?.linkedin_url} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}>LinkedIn Profile</Button>
+                </div>
               </div>
             </>
           )}
