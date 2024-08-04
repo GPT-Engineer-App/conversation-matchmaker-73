@@ -3,8 +3,13 @@ import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useUserMatchmaker } from '@/integrations/supabase';
 
 const Index = () => {
+  const { data: user, isLoading, error } = useUserMatchmaker('current-user-id'); // Replace with actual user ID
+
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error.message}</div>;
   return (
     <div className="min-h-screen flex flex-col bg-gray-100">
       {/* Header */}
@@ -21,21 +26,33 @@ const Index = () => {
         <div className="w-1/4 mr-4">
           <div className="flex flex-col items-center mb-4">
             <Avatar className="w-32 h-32 mb-2">
-              <AvatarImage src="/placeholder.svg" alt="Avatar" />
-              <AvatarFallback>Avatar</AvatarFallback>
+              <AvatarImage src={user.image_url || "/placeholder.svg"} alt={user.name} />
+              <AvatarFallback>{user.name?.charAt(0) || 'U'}</AvatarFallback>
             </Avatar>
+            <h2 className="text-xl font-semibold">{user.name}</h2>
+            <p className="text-sm text-gray-600">{user.job_title}</p>
           </div>
           <Card className="mb-4 p-4">
             <h2 className="font-semibold mb-2">Basic Info</h2>
-            <p>User's basic information goes here</p>
+            <p>Company: {user.company_name}</p>
+            <p>Location: {user.location}</p>
+            <p>Industry: {user.industry}</p>
           </Card>
           <Card className="mb-4 p-4">
             <h2 className="font-semibold mb-2">Key Skills</h2>
-            <p>User's key skills go here</p>
+            <ul className="list-disc list-inside">
+              {user.skills?.slice(0, 5).map((skill, index) => (
+                <li key={index}>{skill}</li>
+              ))}
+            </ul>
           </Card>
           <Card className="mb-4 p-4">
             <h2 className="font-semibold mb-2">Goals</h2>
-            <p>User's goals go here</p>
+            <ul className="list-disc list-inside">
+              {user.business_goals?.slice(0, 3).map((goal, index) => (
+                <li key={index}>{goal}</li>
+              ))}
+            </ul>
           </Card>
           <Button className="w-full">Expand Profile</Button>
         </div>
