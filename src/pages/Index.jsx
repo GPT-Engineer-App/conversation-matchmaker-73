@@ -33,7 +33,7 @@ const Index = () => {
       {/* Main content */}
       <div className="flex flex-1 p-4">
         {/* Left sidebar */}
-        <div className="w-[20%] mr-4">
+        <div className="w-[30%] mr-4">
           <div className="flex flex-col items-center mb-4">
             <Avatar className="w-32 h-32 mb-2">
               <AvatarImage src={user.image_url || "/placeholder.svg"} alt={user.name} />
@@ -66,7 +66,7 @@ const Index = () => {
         </div>
 
         {/* Main content area */}
-        <div className="w-[80%]">
+        <div className="w-[70%]">
           <Tabs defaultValue="list" className="mb-4">
             <TabsList>
               <TabsTrigger value="list">List View</TabsTrigger>
