@@ -3,15 +3,19 @@ import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useUserMatchmaker } from '@/integrations/supabase';
+import { useUserMatchmaker, useMatches } from '@/integrations/supabase';
 
 const Index = () => {
   const userId = '333e05cd-70b9-4455-b15c-928c890bdd02'; // Marius Wilsch's ID
-  const { data: user, isLoading, error } = useUserMatchmaker(userId);
+  const { data: user, isLoading: userLoading, error: userError } = useUserMatchmaker(userId);
+  const { data: matches, isLoading: matchesLoading, error: matchesError } = useMatches();
 
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error.message}</div>;
+  if (userLoading || matchesLoading) return <div>Loading...</div>;
+  if (userError) return <div>Error loading user: {userError.message}</div>;
+  if (matchesError) return <div>Error loading matches: {matchesError.message}</div>;
   if (!user) return <div>User not found</div>;
+
+  const userMatches = matches?.filter(match => match.user_id === userId) || [];
   return (
     <div className="min-h-screen flex flex-col bg-gray-100">
       {/* Header */}
@@ -66,15 +70,28 @@ const Index = () => {
           </Tabs>
 
           {/* Match summaries */}
-          {[1, 2, 3].map((match) => (
-            <Card key={match} className="mb-4 p-4">
-              <h2 className="text-lg font-semibold mb-2">Match {match} Summary</h2>
-              <div className="flex justify-between items-center mb-2">
-                <div className="bg-gray-200 flex-grow h-8 mr-2"></div>
-                <Button size="sm" className="mr-2">Connect</Button>
-                <Button size="sm" variant="outline">More...</Button>
+          {userMatches.map((match) => (
+            <Card key={match.id} className="mb-4 p-4">
+              <div className="flex items-center mb-4">
+                <Avatar className="w-16 h-16 mr-4">
+                  <AvatarImage src={match.matched_user_image || "/placeholder.svg"} alt={match.matched_user_name} />
+                  <AvatarFallback>{match.matched_user_name?.charAt(0) || 'U'}</AvatarFallback>
+                </Avatar>
+                <div>
+                  <h2 className="text-lg font-semibold">{match.matched_user_name}</h2>
+                  <p className="text-sm text-gray-600">Match Score: {match.matching_score}/10</p>
+                </div>
               </div>
-              <div className="bg-gray-100 h-24"></div>
+              <p className="mb-2"><strong>Explanation:</strong> {match.explanation}</p>
+              <p className="mb-2"><strong>Potential Collaboration:</strong> {match.potential_collaboration}</p>
+              <p className="mb-2"><strong>Shared Interests:</strong> {match.shared_interests?.join(', ')}</p>
+              <p className="mb-2"><strong>Geographical Synergy:</strong> {match.geographical_synergy}</p>
+              <p className="mb-2"><strong>Experience Level:</strong> {match.experience_level}</p>
+              <p className="mb-2"><strong>Communication Compatibility:</strong> {match.communication_compatibility}</p>
+              <div className="flex justify-end mt-4">
+                <Button size="sm" className="mr-2">Connect</Button>
+                <Button size="sm" variant="outline" as="a" href={match.matched_user_linkedin} target="_blank" rel="noopener noreferrer">LinkedIn Profile</Button>
+              </div>
             </Card>
           ))}
         </div>
