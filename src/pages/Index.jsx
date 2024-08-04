@@ -179,8 +179,10 @@ const MatchCard = ({ match, isExpanded, onExpand }) => {
             </div>
           </div>
           <div 
-            className={`mt-4 overflow-hidden transition-all duration-300 ease-in-out ${
-              isExpanded ? 'max-h-[1000px] opacity-100' : 'max-h-0 opacity-0'
+            className={`mt-4 overflow-hidden ${
+              isExpanded 
+                ? 'max-h-[1000px] opacity-100 transition-all duration-300 ease-in-out' 
+                : 'max-h-0 opacity-0'
             }`}
           >
             <p className="mb-2 font-semibold">Potential Collaboration</p>
