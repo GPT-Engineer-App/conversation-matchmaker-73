@@ -5,6 +5,8 @@ import { Card } from '@/components/ui/card';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useUserMatchmaker, useMatches, useUsersMatchmakers } from '@/integrations/supabase';
 import { ChevronRight, ChevronLeft } from 'lucide-react';
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 const Index = () => {
   const userId = '333e05cd-70b9-4455-b15c-928c890bdd02'; // Marius Wilsch's ID
@@ -130,6 +132,62 @@ const Index = () => {
 
 export default Index;
 
+const FullProfileContent = ({ match }) => {
+  const sharedInterests = [
+    { label: 'Shared Interests', value: match.shared_interests },
+    { label: 'Geographical Synergy', value: match.geographical_synergy },
+    { label: 'Experience Level', value: match.experience_level },
+    { label: 'Communication Compatibility', value: match.communication_compatibility },
+  ];
+
+  const additionalInfo = [
+    { label: 'Partnership Potential', value: match.matchedUserDetails?.partnership_potential },
+    { label: 'Networking Preferences', value: match.matchedUserDetails?.networking_preferences },
+    { label: 'Industry', value: match.matchedUserDetails?.industry },
+    { label: 'Funding Status', value: match.matchedUserDetails?.funding_status },
+    { label: 'Team Size', value: match.matchedUserDetails?.team_size },
+    { label: 'Revenue Model', value: match.matchedUserDetails?.revenue_model },
+    { label: 'Target Market', value: match.matchedUserDetails?.target_market },
+    { label: 'Tech Stack', value: match.matchedUserDetails?.tech_stack },
+    { label: 'Data Privacy Approach', value: match.matchedUserDetails?.data_privacy_approach },
+    { label: 'Scalability Strategy', value: match.matchedUserDetails?.scalability_strategy },
+    { label: 'Competitive Advantage', value: match.matchedUserDetails?.competitive_advantage },
+    { label: 'Next Milestones', value: match.matchedUserDetails?.next_milestones },
+    { label: 'Personal Motivation', value: match.matchedUserDetails?.personal_motivation },
+    { label: 'Content Creation', value: match.matchedUserDetails?.content_creation },
+    { label: 'Community Involvement', value: match.matchedUserDetails?.community_involvement },
+    { label: 'Mentoring Interests', value: match.matchedUserDetails?.mentoring_interests },
+    { label: 'Skills to Acquire', value: match.matchedUserDetails?.skills_to_acquire },
+    { label: 'Resources Needed', value: match.matchedUserDetails?.resources_needed },
+    { label: 'Success Metrics', value: match.matchedUserDetails?.success_metrics },
+    { label: 'Long Term Vision', value: match.matchedUserDetails?.long_term_vision },
+    { label: 'Experienced Roadblocks', value: match.matchedUserDetails?.experienced_roadblocks },
+    { label: 'Best Practices', value: match.matchedUserDetails?.best_practices },
+  ];
+
+  const renderInfoBox = (title, items) => (
+    <div className="bg-white p-4 rounded-lg shadow-md mb-4">
+      <h3 className="text-lg font-semibold mb-2">{title}</h3>
+      {items.map(({ label, value }) => 
+        value && (
+          <div key={label} className="mb-2">
+            <span className="font-medium">{label}: </span>
+            <span>{Array.isArray(value) ? value.join(', ') : value}</span>
+          </div>
+        )
+      )}
+    </div>
+  );
+
+  return (
+    <div className="space-y-4">
+      <h2 className="text-2xl font-bold mb-4">{match.matched_user_name}'s Profile</h2>
+      {renderInfoBox('Shared Interests', sharedInterests)}
+      {renderInfoBox('Additional Information', additionalInfo)}
+    </div>
+  );
+};
+
 const MatchCard = ({ match, isExpanded, onExpand }) => {
   const [isContentVisible, setIsContentVisible] = React.useState(isExpanded);
 
@@ -176,7 +234,16 @@ const MatchCard = ({ match, isExpanded, onExpand }) => {
               <p className="mb-2 font-semibold">Explanation</p>
               <p className="mb-4">{match.explanation}</p>
               <div className="flex justify-end mt-4">
-                <Button size="sm" className="mr-2">View Full Profile</Button>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button size="sm" className="mr-2">View Full Profile</Button>
+                  </DialogTrigger>
+                  <DialogContent className="w-4/5 h-3/5 max-w-none max-h-none">
+                    <ScrollArea className="h-full">
+                      <FullProfileContent match={match} />
+                    </ScrollArea>
+                  </DialogContent>
+                </Dialog>
                 <Button size="sm" className="mr-2">Connect</Button>
                 <Button size="sm" variant="outline" as="a" href={match.matched_user_linkedin} target="_blank" rel="noopener noreferrer">LinkedIn Profile</Button>
               </div>
