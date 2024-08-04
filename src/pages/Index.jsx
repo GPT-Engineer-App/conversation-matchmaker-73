@@ -131,6 +131,18 @@ const Index = () => {
 export default Index;
 
 const MatchCard = ({ match, isExpanded, onExpand }) => {
+  const [isContentVisible, setIsContentVisible] = React.useState(isExpanded);
+
+  React.useEffect(() => {
+    let timeoutId;
+    if (isExpanded) {
+      setIsContentVisible(true);
+    } else {
+      timeoutId = setTimeout(() => setIsContentVisible(false), 300); // Match the transition duration
+    }
+    return () => clearTimeout(timeoutId);
+  }, [isExpanded]);
+
   return (
     <Card key={match.id} className="mb-4 overflow-hidden">
       <div className="flex">
@@ -171,15 +183,19 @@ const MatchCard = ({ match, isExpanded, onExpand }) => {
               isExpanded ? 'max-h-[1000px] opacity-100' : 'max-h-0 opacity-0'
             }`}
           >
-            <p className="mb-2 font-semibold">Potential Collaboration</p>
-            <p className="mb-4">{match.potential_collaboration}</p>
-            <p className="mb-2 font-semibold">Explanation</p>
-            <p className="mb-4">{match.explanation}</p>
-            <div className="flex justify-end mt-4">
-              <Button size="sm" className="mr-2">View Full Profile</Button>
-              <Button size="sm" className="mr-2">Connect</Button>
-              <Button size="sm" variant="outline" as="a" href={match.matched_user_linkedin} target="_blank" rel="noopener noreferrer">LinkedIn Profile</Button>
-            </div>
+            {isContentVisible && (
+              <>
+                <p className="mb-2 font-semibold">Potential Collaboration</p>
+                <p className="mb-4">{match.potential_collaboration}</p>
+                <p className="mb-2 font-semibold">Explanation</p>
+                <p className="mb-4">{match.explanation}</p>
+                <div className="flex justify-end mt-4">
+                  <Button size="sm" className="mr-2">View Full Profile</Button>
+                  <Button size="sm" className="mr-2">Connect</Button>
+                  <Button size="sm" variant="outline" as="a" href={match.matched_user_linkedin} target="_blank" rel="noopener noreferrer">LinkedIn Profile</Button>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </div>
