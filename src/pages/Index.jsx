@@ -3,7 +3,7 @@ import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useUserMatchmaker, useGetMatchesByUserId, useUsersMatchmakers } from '@/integrations/supabase';
+import { useUserMatchmaker, useGetMatchesByUserId } from '@/integrations/supabase';
 import { ChevronRight, ChevronLeft } from 'lucide-react';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -15,22 +15,18 @@ const Index = () => {
 
   const { data: user, isLoading: userLoading, error: userError } = useUserMatchmaker(userId);
   const { data: matches, isLoading: matchesLoading, error: matchesError } = useGetMatchesByUserId(userId);
-  const { data: allUsers, isLoading: allUsersLoading, error: allUsersError } = useUsersMatchmakers();
 
   const userMatches = React.useMemo(() => {
-    if (matches && allUsers) {
-      return matches.map(match => {
-        const matchedUserDetails = allUsers.find(u => u.id === match.matched_user_id);
-        return {
-          ...match,
-          matchedUserDetails,
-          matched_user_name: matchedUserDetails?.name,
-          matched_user_image: matchedUserDetails?.image_url
-        };
-      });
+    if (matches) {
+      return matches.map(match => ({
+        ...match,
+        matchedUserDetails: match.matched_user,
+        matched_user_name: match.matched_user?.name,
+        matched_user_image: match.matched_user?.image_url
+      }));
     }
     return [];
-  }, [matches, allUsers]);
+  }, [matches]);
 
   useEffect(() => {
     if (matches && matches.length > 0 && !expandedMatchId) {
@@ -42,10 +38,9 @@ const Index = () => {
     setExpandedMatchId(matchId === expandedMatchId ? null : matchId);
   };
 
-  if (userLoading || matchesLoading || allUsersLoading) return <div>Loading...</div>;
+  if (userLoading || matchesLoading) return <div>Loading...</div>;
   if (userError) return <div>Error loading user: {userError.message}</div>;
   if (matchesError) return <div>Error loading matches: {matchesError.message}</div>;
-  if (allUsersError) return <div>Error loading all users: {allUsersError.message}</div>;
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-100">

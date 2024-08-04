@@ -177,5 +177,15 @@ export const useDeleteUserMatchmaker = () => {
 // Additional custom hooks
 export const useGetMatchesByUserId = (userId) => useQuery({
     queryKey: ['matches', userId],
-    queryFn: () => fromSupabase(supabase.from('matches_matchmaker').select('*').eq('user_id', userId))
+    queryFn: async () => {
+        const { data, error } = await supabase
+            .from('matches_matchmaker')
+            .select(`
+                *,
+                matched_user:users_matchmakers!matched_user_id(*)
+            `)
+            .eq('user_id', userId);
+        if (error) throw new Error(error.message);
+        return data;
+    }
 });
