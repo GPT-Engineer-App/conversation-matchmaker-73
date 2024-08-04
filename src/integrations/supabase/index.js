@@ -107,7 +107,7 @@ export const useMatch = (matchId) => useQuery({
 });
 
 export const useGetMatchesByUserId = (userId) => useQuery({
-    queryKey: ['matches_matchmaker', userId],
+    queryKey: ['matches_matchmaker', 'user', userId],
     queryFn: () => fromSupabase(supabase.from('matches_matchmaker').select('*').eq('user_id', userId)),
     enabled: !!userId
 });
