@@ -144,59 +144,44 @@ const MatchCard = ({ match, isExpanded, onExpand }) => {
   }, [isExpanded]);
 
   return (
-    <Card key={match.id} className="mb-4 overflow-hidden">
-      <div className="flex">
-        {/* Sidebar */}
-        <div 
-          className="w-[5%] bg-gray-100 flex flex-col items-center justify-center cursor-pointer transition-all duration-300 ease-in-out" 
-          onClick={onExpand}
-        >
-          {isExpanded ? (
-            <ChevronLeft className="h-6 w-6 text-gray-600 transition-transform duration-300 ease-in-out" />
-          ) : (
-            <ChevronRight className="h-6 w-6 text-gray-600 transition-transform duration-300 ease-in-out" />
-          )}
+    <Card key={match.id} className="mb-4 overflow-hidden cursor-pointer" onClick={onExpand}>
+      <div className="p-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center">
+            <Avatar className="w-16 h-16 mr-4">
+              <AvatarImage src={match.matched_user_image || "/placeholder.svg"} alt={match.matched_user_name} />
+              <AvatarFallback>{match.matched_user_name?.charAt(0) || 'U'}</AvatarFallback>
+            </Avatar>
+            <div>
+              <h2 className="text-lg font-semibold">{match.matched_user_name}</h2>
+              <p className="text-sm text-gray-600">{match.matchedUserDetails?.current_title}</p>
+              <p className="text-sm text-gray-600">{match.matchedUserDetails?.company_name}</p>
+            </div>
+          </div>
+          <div className="text-right">
+            <p className="text-2xl font-bold text-blue-600">{match.matching_score}</p>
+            <p className="text-sm text-gray-600">Match Score</p>
+            <p className="text-sm text-gray-600">{match.matchedUserDetails?.location}</p>
+          </div>
         </div>
-
-        {/* Main content */}
-        <div className="w-[95%] p-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center">
-              <Avatar className="w-16 h-16 mr-4">
-                <AvatarImage src={match.matched_user_image || "/placeholder.svg"} alt={match.matched_user_name} />
-                <AvatarFallback>{match.matched_user_name?.charAt(0) || 'U'}</AvatarFallback>
-              </Avatar>
-              <div>
-                <h2 className="text-lg font-semibold">{match.matched_user_name}</h2>
-                <p className="text-sm text-gray-600">{match.matchedUserDetails?.current_title}</p>
-                <p className="text-sm text-gray-600">{match.matchedUserDetails?.company_name}</p>
+        <div 
+          className={`mt-4 overflow-hidden transition-all duration-300 ease-in-out ${
+            isExpanded ? 'max-h-[1000px] opacity-100' : 'max-h-0 opacity-0'
+          }`}
+        >
+          {isContentVisible && (
+            <>
+              <p className="mb-2 font-semibold">Potential Collaboration</p>
+              <p className="mb-4">{match.potential_collaboration}</p>
+              <p className="mb-2 font-semibold">Explanation</p>
+              <p className="mb-4">{match.explanation}</p>
+              <div className="flex justify-end mt-4">
+                <Button size="sm" className="mr-2">View Full Profile</Button>
+                <Button size="sm" className="mr-2">Connect</Button>
+                <Button size="sm" variant="outline" as="a" href={match.matched_user_linkedin} target="_blank" rel="noopener noreferrer">LinkedIn Profile</Button>
               </div>
-            </div>
-            <div className="text-right">
-              <p className="text-2xl font-bold text-blue-600">{match.matching_score}</p>
-              <p className="text-sm text-gray-600">Match Score</p>
-              <p className="text-sm text-gray-600">{match.matchedUserDetails?.location}</p>
-            </div>
-          </div>
-          <div 
-            className={`mt-4 overflow-hidden transition-all duration-300 ease-in-out ${
-              isExpanded ? 'max-h-[1000px] opacity-100' : 'max-h-0 opacity-0'
-            }`}
-          >
-            {isContentVisible && (
-              <>
-                <p className="mb-2 font-semibold">Potential Collaboration</p>
-                <p className="mb-4">{match.potential_collaboration}</p>
-                <p className="mb-2 font-semibold">Explanation</p>
-                <p className="mb-4">{match.explanation}</p>
-                <div className="flex justify-end mt-4">
-                  <Button size="sm" className="mr-2">View Full Profile</Button>
-                  <Button size="sm" className="mr-2">Connect</Button>
-                  <Button size="sm" variant="outline" as="a" href={match.matched_user_linkedin} target="_blank" rel="noopener noreferrer">LinkedIn Profile</Button>
-                </div>
-              </>
-            )}
-          </div>
+            </>
+          )}
         </div>
       </div>
     </Card>
