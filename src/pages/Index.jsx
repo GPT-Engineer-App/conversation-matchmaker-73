@@ -34,7 +34,7 @@ const Index = () => {
       {/* Main content */}
       <div className="flex flex-1 p-4">
         {/* Left sidebar - User Profile */}
-        <div className="w-[30%] mr-4">
+        <div className="w-[25%] mr-4">
           <Card className="p-4 shadow-lg bg-white rounded-lg">
             <div className="flex flex-col items-center mb-4">
               <Avatar className="w-32 h-32 mb-2">
@@ -69,7 +69,7 @@ const Index = () => {
         </div>
 
         {/* Main content area - Matches */}
-        <div className="w-[70%]">
+        <div className="w-[75%]">
           <Tabs defaultValue="list" className="mb-4">
             <TabsList>
               <TabsTrigger value="list">List View</TabsTrigger>
@@ -103,7 +103,7 @@ const MatchCard = ({ match }) => {
     <Card key={match.id} className="mb-4 overflow-hidden">
       <div className="flex">
         {/* Sidebar */}
-        <div className="w-[10%] bg-gray-100 flex flex-col items-center justify-center cursor-pointer" onClick={() => setIsExpanded(!isExpanded)}>
+        <div className="w-[5%] bg-gray-100 flex flex-col items-center justify-center cursor-pointer" onClick={() => setIsExpanded(!isExpanded)}>
           {isExpanded ? (
             <ChevronLeft className="h-6 w-6 text-gray-600" />
           ) : (
@@ -112,7 +112,7 @@ const MatchCard = ({ match }) => {
         </div>
 
         {/* Main content */}
-        <div className="w-[90%] p-4">
+        <div className="w-[95%] p-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center">
               <Avatar className="w-16 h-16 mr-4">
