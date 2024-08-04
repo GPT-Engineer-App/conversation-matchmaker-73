@@ -47,7 +47,7 @@ const Index = () => {
       {/* Main content */}
       <div className="flex flex-1 p-4">
         {/* Left sidebar - User Profile */}
-        <div className="w-[25%] mr-4 space-y-4">
+        <div className="w-[30%] mr-4 space-y-4">
           <Card className="p-4 shadow-lg bg-white rounded-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:scale-105 border border-gray-200 hover:border-gray-300">
             <div className="flex flex-col items-center">
               <Avatar className="w-24 h-24 mb-2">
@@ -100,7 +100,7 @@ const Index = () => {
         </div>
 
         {/* Main content area - Matches */}
-        <div className="w-[75%]">
+        <div className="w-[70%]">
           <Tabs defaultValue="list" className="mb-4">
             <TabsList>
               <TabsTrigger value="list">List View</TabsTrigger>
