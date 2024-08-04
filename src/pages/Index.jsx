@@ -46,20 +46,41 @@ const Index = () => {
             </div>
           </Card>
           
-          <Card className="p-4 shadow-lg bg-white rounded-lg">
-            <p><span className="font-semibold">Company:</span> {user.company_name || 'Veloxforce'}</p>
-            <p><span className="font-semibold">Location:</span> {user.location || 'Munich, Bavaria, Germany'}</p>
-            <p><span className="font-semibold">Industry:</span> {user.industry || 'AI/Software'}</p>
+          <Card className="p-4 shadow-lg bg-white rounded-lg space-y-4">
+            <div>
+              <p className="font-semibold">Company</p>
+              <p>{user.company_name || 'Veloxforce'}</p>
+            </div>
+            <div>
+              <p className="font-semibold">Location</p>
+              <p>{user.location || 'Munich, Bavaria, Germany'}</p>
+            </div>
+            <div>
+              <p className="font-semibold">Industry</p>
+              <p>{user.industry || 'AI/Software'}</p>
+            </div>
           </Card>
           
-          <Card className="p-4 shadow-lg bg-white rounded-lg">
-            <p><span className="font-semibold">Email:</span> {user.main_email}</p>
-            <p><span className="font-semibold">LinkedIn:</span> <a href={user.linkedin_url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Profile</a></p>
+          <Card className="p-4 shadow-lg bg-white rounded-lg space-y-4">
+            <div>
+              <p className="font-semibold">Email</p>
+              <p>{user.main_email}</p>
+            </div>
+            <div>
+              <p className="font-semibold">LinkedIn</p>
+              <a href={user.linkedin_url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Profile</a>
+            </div>
           </Card>
           
-          <Card className="p-4 shadow-lg bg-white rounded-lg">
-            <p><span className="font-semibold">Website:</span> <a href={user.company_website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Veloxforce</a></p>
-            <p><span className="font-semibold">LinkedIn:</span> <a href={user.company_linkedin} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Company Page</a></p>
+          <Card className="p-4 shadow-lg bg-white rounded-lg space-y-4">
+            <div>
+              <p className="font-semibold">Website</p>
+              <a href={user.company_website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Veloxforce</a>
+            </div>
+            <div>
+              <p className="font-semibold">Company LinkedIn</p>
+              <a href={user.company_linkedin} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Company Page</a>
+            </div>
           </Card>
           
           <Button className="w-full bg-indigo-900 text-white hover:bg-indigo-800">Expand Profile</Button>
