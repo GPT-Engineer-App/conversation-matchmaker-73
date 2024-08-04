@@ -56,11 +56,10 @@ const Index = () => {
           
           {/* ContactDetails */}
           <Card className="p-4 shadow-lg bg-white rounded-lg">
-            <p><span className="font-semibold">Main Email:</span> {user.main_email}</p>
-            <p><span className="font-semibold">Secondary Email:</span> {user.secondary_email}</p>
-            <p><span className="font-semibold">Phone:</span> {user.phone_number}</p>
-            <p><span className="font-semibold">Location:</span> {user.location}</p>
-            <p><span className="font-semibold">LinkedIn:</span> <a href={user.linkedin_url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Profile</a></p>
+            <p>{user.main_email}</p>
+            <p>{user.phone_number}</p>
+            <p>{user.location}</p>
+            <p><a href={user.linkedin_url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">LinkedIn Profile</a></p>
           </Card>
           
           {/* SkillsDisplay */}
