@@ -7,9 +7,10 @@ import { useUserMatchmaker, useMatches, useUsersMatchmakers } from '@/integratio
 import { ChevronRight, ChevronLeft } from 'lucide-react';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Input } from '@/components/ui/input';
 
 const Index = () => {
-  const userId = '333e05cd-70b9-4455-b15c-928c890bdd02'; // Marius Wilsch's ID
+  const [userId, setUserId] = useState('333e05cd-70b9-4455-b15c-928c890bdd02'); // Default to Marius Wilsch's ID
   const { data: user, isLoading: userLoading, error: userError } = useUserMatchmaker(userId);
   const { data: matches, isLoading: matchesLoading, error: matchesError } = useMatches();
   const { data: allUsers, isLoading: allUsersLoading, error: allUsersError } = useUsersMatchmakers();
@@ -21,11 +22,9 @@ const Index = () => {
     }
   }, [matches, expandedMatchId]);
 
-  if (userLoading || matchesLoading || allUsersLoading) return <div>Loading...</div>;
-  if (userError) return <div>Error loading user: {userError.message}</div>;
+  if (matchesLoading || allUsersLoading) return <div>Loading...</div>;
   if (matchesError) return <div>Error loading matches: {matchesError.message}</div>;
   if (allUsersError) return <div>Error loading all users: {allUsersError.message}</div>;
-  if (!user) return <div>User not found</div>;
 
   const userMatches = matches?.filter(match => match.user_id === userId).map(match => {
     const matchedUser = allUsers?.find(u => u.id === match.matched_user_id);
@@ -35,12 +34,20 @@ const Index = () => {
   const handleExpand = (matchId) => {
     setExpandedMatchId(matchId === expandedMatchId ? null : matchId);
   };
+
   return (
     <div className="min-h-screen flex flex-col bg-gray-100">
       {/* Header */}
       <header className="bg-white p-4 shadow-sm">
-        <div className="flex items-center">
+        <div className="flex items-center justify-between">
           <span className="text-xl font-bold text-blue-600">MatchMaker</span>
+          <Input
+            type="text"
+            placeholder="Enter User ID"
+            value={userId}
+            onChange={(e) => setUserId(e.target.value)}
+            className="w-64"
+          />
         </div>
       </header>
 
@@ -48,55 +55,65 @@ const Index = () => {
       <div className="flex flex-1 p-4">
         {/* Left sidebar - User Profile */}
         <div className="w-[30%] mr-4 space-y-4">
-          <Card className="p-4 shadow-lg bg-white rounded-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:scale-105 border border-gray-200 hover:border-gray-300">
-            <div className="flex flex-col items-center">
-              <Avatar className="w-24 h-24 mb-2">
-                <AvatarImage src={user.image_url || "/placeholder.svg"} alt={user.name} />
-                <AvatarFallback>{user.name?.charAt(0) || 'U'}</AvatarFallback>
-              </Avatar>
-              <h2 className="text-xl font-semibold">{user.name}</h2>
-              <p className="text-sm text-gray-600 text-center mt-2">{user.current_title}</p>
-            </div>
-          </Card>
-          
-          <Card className="p-4 shadow-lg bg-white rounded-lg space-y-4 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:scale-105 border border-gray-200 hover:border-gray-300">
-            <div>
-              <p className="font-semibold">Company</p>
-              <p>{user.company_name || 'Veloxforce'}</p>
-            </div>
-            <div>
-              <p className="font-semibold">Location</p>
-              <p>{user.location || 'Munich, Bavaria, Germany'}</p>
-            </div>
-            <div>
-              <p className="font-semibold">Industry</p>
-              <p>{user.industry || 'AI/Software'}</p>
-            </div>
-          </Card>
-          
-          <Card className="p-4 shadow-lg bg-white rounded-lg space-y-4 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-            <div>
-              <p className="font-semibold">Email</p>
-              <p>{user.main_email}</p>
-            </div>
-            <div>
-              <p className="font-semibold">LinkedIn</p>
-              <a href={user.linkedin_url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Profile</a>
-            </div>
-          </Card>
-          
-          <Card className="p-4 shadow-lg bg-white rounded-lg space-y-4 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-            <div>
-              <p className="font-semibold">Website</p>
-              <a href={user.company_website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Veloxforce</a>
-            </div>
-            <div>
-              <p className="font-semibold">Company LinkedIn</p>
-              <a href={user.company_linkedin} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Company Page</a>
-            </div>
-          </Card>
-          
-          <Button className="w-full bg-indigo-900 text-white hover:bg-indigo-800">Expand Profile</Button>
+          {userLoading ? (
+            <div>Loading user profile...</div>
+          ) : userError ? (
+            <div>Error loading user: {userError.message}</div>
+          ) : user ? (
+            <>
+              <Card className="p-4 shadow-lg bg-white rounded-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:scale-105 border border-gray-200 hover:border-gray-300">
+                <div className="flex flex-col items-center">
+                  <Avatar className="w-24 h-24 mb-2">
+                    <AvatarImage src={user.image_url || "/placeholder.svg"} alt={user.name} />
+                    <AvatarFallback>{user.name?.charAt(0) || 'U'}</AvatarFallback>
+                  </Avatar>
+                  <h2 className="text-xl font-semibold">{user.name}</h2>
+                  <p className="text-sm text-gray-600 text-center mt-2">{user.current_title}</p>
+                </div>
+              </Card>
+              
+              <Card className="p-4 shadow-lg bg-white rounded-lg space-y-4 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:scale-105 border border-gray-200 hover:border-gray-300">
+                <div>
+                  <p className="font-semibold">Company</p>
+                  <p>{user.company_name || 'Veloxforce'}</p>
+                </div>
+                <div>
+                  <p className="font-semibold">Location</p>
+                  <p>{user.location || 'Munich, Bavaria, Germany'}</p>
+                </div>
+                <div>
+                  <p className="font-semibold">Industry</p>
+                  <p>{user.industry || 'AI/Software'}</p>
+                </div>
+              </Card>
+              
+              <Card className="p-4 shadow-lg bg-white rounded-lg space-y-4 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+                <div>
+                  <p className="font-semibold">Email</p>
+                  <p>{user.main_email}</p>
+                </div>
+                <div>
+                  <p className="font-semibold">LinkedIn</p>
+                  <a href={user.linkedin_url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Profile</a>
+                </div>
+              </Card>
+              
+              <Card className="p-4 shadow-lg bg-white rounded-lg space-y-4 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+                <div>
+                  <p className="font-semibold">Website</p>
+                  <a href={user.company_website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Veloxforce</a>
+                </div>
+                <div>
+                  <p className="font-semibold">Company LinkedIn</p>
+                  <a href={user.company_linkedin} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Company Page</a>
+                </div>
+              </Card>
+              
+              <Button className="w-full bg-indigo-900 text-white hover:bg-indigo-800">Expand Profile</Button>
+            </>
+          ) : (
+            <div>User not found</div>
+          )}
         </div>
 
         {/* Main content area - Matches */}
