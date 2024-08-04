@@ -19,24 +19,69 @@ const fromSupabase = async (query) => {
 
 /* supabase integration types
 
+### threads
+
+| name                       | type                     | format                  | required |
+|----------------------------|--------------------------|-------------------------|----------|
+| thread_id                  | text                     | string                  | true     |
+| created_at                 | timestamp with time zone | string                  | false    |
+| name                       | text                     | string                  | false    |
+| user_id                    | uuid                     | string                  | false    |
+| status                     | text                     | string                  | false    |
+| meeting_booked             | boolean                  | boolean                 | false    |
+| meeting_date               | timestamp with time zone | string                  | false    |
+| user_feedback              | text                     | string                  | false    |
+| conversation               | jsonb                    | object                  | false    |
+| costs                      | double precision         | number                  | false    |
+| time_spent_in_conversation | double precision         | number                  | false    |
+
 ### matches_matchmaker
 
-| name                        | type    | format | required |
-|-----------------------------|---------|--------|----------|
-| id                          | uuid    | string | true     |
-| user_id                     | uuid    | string | false    |
-| matched_user_id             | uuid    | string | false    |
-| matching_score              | numeric | number | false    |
-| explanation                 | text    | string | false    |
-| complementary_skills        | text[]  | array  | false    |
-| potential_collaboration     | text    | string | false    |
-| shared_interests            | text[]  | array  | false    |
-| geographical_synergy        | text    | string | false    |
-| experience_level            | text    | string | false    |
-| communication_compatibility | text    | string | false    |
-| matched_user_name           | text    | string | false    |
-| matched_user_image          | text    | string | false    |
-| matched_user_linkedin       | text    | string | false    |
+| name                         | type     | format | required |
+|------------------------------|----------|--------|----------|
+| id                           | uuid     | string | true     |
+| user_id                      | uuid     | string | false    |
+| matched_user_id              | uuid     | string | false    |
+| matching_score               | numeric  | number | false    |
+| explanation                  | text     | string | false    |
+| complementary_skills         | text[]   | array  | false    |
+| potential_collaboration      | text     | string | false    |
+| shared_interests             | text[]   | array  | false    |
+| geographical_synergy         | text     | string | false    |
+| experience_level             | text     | string | false    |
+| communication_compatibility  | text     | string | false    |
+
+### filters
+
+| name                     | type                     | format  | required |
+|--------------------------|--------------------------|---------|----------|
+| filter_id                | uuid                     | string  | true     |
+| name                     | text                     | string  | false    |
+| created_at               | timestamp with time zone | string  | false    |
+| user_id                  | uuid                     | string  | false    |
+| thread_id                | text                     | string  | false    |
+| budget_from              | integer                  | number  | false    |
+| budget_to                | integer                  | number  | false    |
+| commercial_type          | text                     | string  | false    |
+| property_type            | text                     | string  | false    |
+| size_from                | integer                  | number  | false    |
+| size_to                  | integer                  | number  | false    |
+| bedrooms_from            | integer                  | number  | false    |
+| bedrooms_to              | integer                  | number  | false    |
+| bathrooms_from           | integer                  | number  | false    |
+| bathrooms_to             | integer                  | number  | false    |
+| floor_from               | integer                  | number  | false    |
+| floor_to                 | integer                  | number  | false    |
+| total_floors             | integer                  | number  | false    |
+| balcony_size_from        | integer                  | number  | false    |
+| balcony_size_to          | integer                  | number  | false    |
+| furnishing               | text                     | string  | false    |
+| parking                  | boolean                  | boolean | false    |
+| year_of_completion_from  | integer                  | number  | false    |
+| year_of_completion_to    | integer                  | number  | false    |
+| location                 | text                     | string  | false    |
+| amenities                | text[]                   | array   | false    |
+| other_wishes             | text[]                   | array   | false    |
 
 ### users_matchmakers
 
@@ -93,23 +138,75 @@ const fromSupabase = async (query) => {
 | career_stage                  | text   | string | false    |
 | preferred_communication       | text   | string | false    |
 
+### users
+
+| name                        | type                     | format  | required |
+|-----------------------------|--------------------------|---------|----------|
+| user_id                     | uuid                     | string  | true     |
+| created_at                  | timestamp with time zone | string  | false    |
+| name                        | text                     | string  | false    |
+| login                       | text                     | string  | false    |
+| phone_number                | text                     | string  | false    |
+| email                       | text                     | string  | false    |
+| social_media                | text                     | string  | false    |
+| social_media_name           | text                     | string  | false    |
+| communication_channel       | text                     | string  | false    |
+| communication_channel_name  | text                     | string  | false    |
+| last_contacted              | timestamp with time zone | string  | false    |
+| campain_id                  | smallint                 | number  | false    |
+
 */
 
-// Matches Matchmaker hooks
+// Threads
+export const useThreads = () => useQuery({
+    queryKey: ['threads'],
+    queryFn: () => fromSupabase(supabase.from('threads').select('*'))
+});
+
+export const useThread = (threadId) => useQuery({
+    queryKey: ['threads', threadId],
+    queryFn: () => fromSupabase(supabase.from('threads').select('*').eq('thread_id', threadId).single())
+});
+
+export const useAddThread = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (newThread) => fromSupabase(supabase.from('threads').insert([newThread])),
+        onSuccess: () => {
+            queryClient.invalidateQueries('threads');
+        },
+    });
+};
+
+export const useUpdateThread = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: ({ threadId, updates }) => fromSupabase(supabase.from('threads').update(updates).eq('thread_id', threadId)),
+        onSuccess: () => {
+            queryClient.invalidateQueries('threads');
+        },
+    });
+};
+
+export const useDeleteThread = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (threadId) => fromSupabase(supabase.from('threads').delete().eq('thread_id', threadId)),
+        onSuccess: () => {
+            queryClient.invalidateQueries('threads');
+        },
+    });
+};
+
+// Matches Matchmaker
 export const useMatches = () => useQuery({
-    queryKey: ['matches_matchmaker'],
+    queryKey: ['matches'],
     queryFn: () => fromSupabase(supabase.from('matches_matchmaker').select('*'))
 });
 
 export const useMatch = (matchId) => useQuery({
-    queryKey: ['matches_matchmaker', matchId],
+    queryKey: ['matches', matchId],
     queryFn: () => fromSupabase(supabase.from('matches_matchmaker').select('*').eq('id', matchId).single())
-});
-
-export const useGetMatchesByUserId = (userId) => useQuery({
-    queryKey: ['matches_matchmaker', 'user', userId],
-    queryFn: () => fromSupabase(supabase.from('matches_matchmaker').select('*').eq('user_id', userId)),
-    enabled: !!userId
 });
 
 export const useAddMatch = () => {
@@ -117,7 +214,7 @@ export const useAddMatch = () => {
     return useMutation({
         mutationFn: (newMatch) => fromSupabase(supabase.from('matches_matchmaker').insert([newMatch])),
         onSuccess: () => {
-            queryClient.invalidateQueries('matches_matchmaker');
+            queryClient.invalidateQueries('matches');
         },
     });
 };
@@ -127,7 +224,7 @@ export const useUpdateMatch = () => {
     return useMutation({
         mutationFn: ({ matchId, updates }) => fromSupabase(supabase.from('matches_matchmaker').update(updates).eq('id', matchId)),
         onSuccess: () => {
-            queryClient.invalidateQueries('matches_matchmaker');
+            queryClient.invalidateQueries('matches');
         },
     });
 };
@@ -137,12 +234,53 @@ export const useDeleteMatch = () => {
     return useMutation({
         mutationFn: (matchId) => fromSupabase(supabase.from('matches_matchmaker').delete().eq('id', matchId)),
         onSuccess: () => {
-            queryClient.invalidateQueries('matches_matchmaker');
+            queryClient.invalidateQueries('matches');
         },
     });
 };
 
-// Users Matchmakers hooks
+// Filters
+export const useFilters = () => useQuery({
+    queryKey: ['filters'],
+    queryFn: () => fromSupabase(supabase.from('filters').select('*'))
+});
+
+export const useFilter = (filterId) => useQuery({
+    queryKey: ['filters', filterId],
+    queryFn: () => fromSupabase(supabase.from('filters').select('*').eq('filter_id', filterId).single())
+});
+
+export const useAddFilter = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (newFilter) => fromSupabase(supabase.from('filters').insert([newFilter])),
+        onSuccess: () => {
+            queryClient.invalidateQueries('filters');
+        },
+    });
+};
+
+export const useUpdateFilter = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: ({ filterId, updates }) => fromSupabase(supabase.from('filters').update(updates).eq('filter_id', filterId)),
+        onSuccess: () => {
+            queryClient.invalidateQueries('filters');
+        },
+    });
+};
+
+export const useDeleteFilter = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (filterId) => fromSupabase(supabase.from('filters').delete().eq('filter_id', filterId)),
+        onSuccess: () => {
+            queryClient.invalidateQueries('filters');
+        },
+    });
+};
+
+// Users Matchmakers
 export const useUsersMatchmakers = () => useQuery({
     queryKey: ['users_matchmakers'],
     queryFn: () => fromSupabase(supabase.from('users_matchmakers').select('*'))
@@ -182,3 +320,50 @@ export const useDeleteUserMatchmaker = () => {
         },
     });
 };
+
+// Users
+export const useUsers = () => useQuery({
+    queryKey: ['users'],
+    queryFn: () => fromSupabase(supabase.from('users').select('*'))
+});
+
+export const useUser = (userId) => useQuery({
+    queryKey: ['users', userId],
+    queryFn: () => fromSupabase(supabase.from('users').select('*').eq('user_id', userId).single())
+});
+
+export const useAddUser = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (newUser) => fromSupabase(supabase.from('users').insert([newUser])),
+        onSuccess: () => {
+            queryClient.invalidateQueries('users');
+        },
+    });
+};
+
+export const useUpdateUser = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: ({ userId, updates }) => fromSupabase(supabase.from('users').update(updates).eq('user_id', userId)),
+        onSuccess: () => {
+            queryClient.invalidateQueries('users');
+        },
+    });
+};
+
+export const useDeleteUser = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (userId) => fromSupabase(supabase.from('users').delete().eq('user_id', userId)),
+        onSuccess: () => {
+            queryClient.invalidateQueries('users');
+        },
+    });
+};
+
+// Additional custom hooks
+export const useGetMatchesByUserId = (userId) => useQuery({
+    queryKey: ['matches', userId],
+    queryFn: () => fromSupabase(supabase.from('matches_matchmaker').select('*').eq('user_id', userId))
+});
