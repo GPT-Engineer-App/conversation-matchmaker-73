@@ -213,7 +213,7 @@ const FullProfileContent = ({ match, matchedUserDetails }) => {
 
   return (
     <div className="space-y-4">
-      <h2 className="text-2xl font-bold mb-4">{match.matched_user_name}'s Profile</h2>
+      <h2 className="text-2xl font-bold mb-4">{matchedUserDetails?.name}'s Profile</h2>
       {renderInfoBox('Shared Interests', sharedInterests)}
       {renderInfoBox('Additional Information', additionalInfo)}
     </div>
