@@ -311,7 +311,7 @@ const MatchCard = ({ match, isExpanded, onExpand }) => {
                 </>
               )}
               <div className="mt-4">
-                <hr className="border-t border-gray-200 mb-4" />
+                <hr className="border-t-2 border-gray-300 mb-4" />
                 <div className="flex justify-start space-x-2">
                   <Dialog>
                     <DialogTrigger asChild>
