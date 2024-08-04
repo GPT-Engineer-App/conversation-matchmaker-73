@@ -248,7 +248,8 @@ export const useGetMatchesByUserId = (userId) =>
                 matched_user:users_matchmakers!matched_user_id(*)
             `
         )
-        .eq("user_id", userId);
+        .eq("user_id", userId)
+        .order('matching_score', { ascending: false });
       if (error) throw new Error(error.message);
       return data;
     },

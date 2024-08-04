@@ -32,10 +32,10 @@ const Index = () => {
   }, [matches]);
 
   useEffect(() => {
-    if (matches && matches.length > 0 && !expandedMatchId) {
-      setExpandedMatchId(matches[0].id);
+    if (userMatches.length > 0 && !expandedMatchId) {
+      setExpandedMatchId(userMatches[0].id);
     }
-  }, [matches, expandedMatchId]);
+  }, [userMatches, expandedMatchId]);
 
   useEffect(() => {
     if (!userLoading && !matchesLoading) {
