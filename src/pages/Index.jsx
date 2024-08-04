@@ -174,9 +174,6 @@ const Index = () => {
 
       {/* Footer */}
       <footer className="bg-white p-4 shadow-sm">
-        <div className="text-center text-sm text-gray-600">
-          DataSyncIndicator
-        </div>
       </footer>
     </div>
   );
