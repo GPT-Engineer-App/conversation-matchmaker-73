@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { useUserMatchmaker, useGetMatchesByUserId, useMatchedUserDetails } from '@/integrations/supabase';
+import { useUserMatchmaker, useGetMatchesByUserId, useMatchedUserDetails, useMatchesSubscription } from '@/integrations/supabase';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Input } from '@/components/ui/input';
@@ -15,6 +15,9 @@ const Index = () => {
   const userId = '333e05cd-70b9-4455-b15c-928c890bdd02'; // Default to Marius Wilsch's ID
   const { data: user, isLoading: userLoading, error: userError } = useUserMatchmaker(userId);
   const { data: matches, isLoading: matchesLoading, error: matchesError } = useGetMatchesByUserId(userId);
+
+  // Subscribe to matches updates
+  useMatchesSubscription();
 
   const userMatches = React.useMemo(() => {
     if (matches) {

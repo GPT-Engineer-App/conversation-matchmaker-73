@@ -6,6 +6,7 @@ import {
   QueryClient,
   QueryClientProvider,
 } from "@tanstack/react-query";
+import { useEffect } from "react";
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_PROJECT_URL;
 const supabaseKey = import.meta.env.VITE_SUPABASE_API_KEY;
@@ -19,6 +20,27 @@ export function SupabaseProvider({ children }) {
     { client: queryClient },
     children
   );
+}
+
+export function useMatchesSubscription() {
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    const channel = supabase
+      .channel('matches_updates')
+      .on('postgres_changes', 
+        { event: 'UPDATE', schema: 'public', table: 'matches_matchmaker' }, 
+        (payload) => {
+          console.log('Match updated:', payload);
+          queryClient.invalidateQueries('matches');
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [queryClient]);
 }
 
 const fromSupabase = async (query) => {
