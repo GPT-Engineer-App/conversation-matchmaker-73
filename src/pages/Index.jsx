@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useUserMatchmaker, useMatches, useUsersMatchmakers } from '@/integrations/supabase';
+import { ChevronDown, ChevronUp } from 'lucide-react';
 
 const Index = () => {
   const userId = '333e05cd-70b9-4455-b15c-928c890bdd02'; // Marius Wilsch's ID
@@ -76,35 +77,7 @@ const Index = () => {
 
           {/* Match summaries */}
           {userMatches.map((match) => (
-            <Card key={match.id} className="mb-4 p-4">
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center">
-                  <Avatar className="w-16 h-16 mr-4">
-                    <AvatarImage src={match.matched_user_image || "/placeholder.svg"} alt={match.matched_user_name} />
-                    <AvatarFallback>{match.matched_user_name?.charAt(0) || 'U'}</AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <h2 className="text-lg font-semibold">{match.matched_user_name}</h2>
-                    <p className="text-sm text-gray-600">{match.matchedUserDetails?.current_title}</p>
-                    <p className="text-sm text-gray-600">{match.matchedUserDetails?.company_name}</p>
-                  </div>
-                </div>
-                <div className="text-right">
-                  <p className="text-2xl font-bold text-blue-600">{match.matching_score}</p>
-                  <p className="text-sm text-gray-600">Match Score</p>
-                  <p className="text-sm text-gray-600">{match.matchedUserDetails?.location}</p>
-                </div>
-              </div>
-              <p className="mb-2 font-semibold">Potential Collaboration</p>
-              <p className="mb-4">{match.potential_collaboration}</p>
-              <p className="mb-2 font-semibold">Explanation</p>
-              <p className="mb-4">{match.explanation}</p>
-              <div className="flex justify-end mt-4">
-                <Button size="sm" className="mr-2">View Full Profile</Button>
-                <Button size="sm" className="mr-2">Connect</Button>
-                <Button size="sm" variant="outline" as="a" href={match.matched_user_linkedin} target="_blank" rel="noopener noreferrer">LinkedIn Profile</Button>
-              </div>
-            </Card>
+            <MatchCard key={match.id} match={match} />
           ))}
         </div>
       </div>
@@ -120,3 +93,59 @@ const Index = () => {
 };
 
 export default Index;
+
+const MatchCard = ({ match }) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  return (
+    <Card key={match.id} className="mb-4 p-4">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center">
+          <Avatar className="w-16 h-16 mr-4">
+            <AvatarImage src={match.matched_user_image || "/placeholder.svg"} alt={match.matched_user_name} />
+            <AvatarFallback>{match.matched_user_name?.charAt(0) || 'U'}</AvatarFallback>
+          </Avatar>
+          <div>
+            <h2 className="text-lg font-semibold">{match.matched_user_name}</h2>
+            <p className="text-sm text-gray-600">{match.matchedUserDetails?.current_title}</p>
+            <p className="text-sm text-gray-600">{match.matchedUserDetails?.company_name}</p>
+          </div>
+        </div>
+        <div className="text-right">
+          <p className="text-2xl font-bold text-blue-600">{match.matching_score}</p>
+          <p className="text-sm text-gray-600">Match Score</p>
+          <p className="text-sm text-gray-600">{match.matchedUserDetails?.location}</p>
+        </div>
+      </div>
+      <Button
+        variant="ghost"
+        size="sm"
+        className="mt-2 w-full flex items-center justify-center"
+        onClick={() => setIsExpanded(!isExpanded)}
+      >
+        {isExpanded ? (
+          <>
+            Hide Details <ChevronUp className="ml-2 h-4 w-4" />
+          </>
+        ) : (
+          <>
+            Show Details <ChevronDown className="ml-2 h-4 w-4" />
+          </>
+        )}
+      </Button>
+      {isExpanded && (
+        <div className="mt-4">
+          <p className="mb-2 font-semibold">Potential Collaboration</p>
+          <p className="mb-4">{match.potential_collaboration}</p>
+          <p className="mb-2 font-semibold">Explanation</p>
+          <p className="mb-4">{match.explanation}</p>
+          <div className="flex justify-end mt-4">
+            <Button size="sm" className="mr-2">View Full Profile</Button>
+            <Button size="sm" className="mr-2">Connect</Button>
+            <Button size="sm" variant="outline" as="a" href={match.matched_user_linkedin} target="_blank" rel="noopener noreferrer">LinkedIn Profile</Button>
+          </div>
+        </div>
+      )}
+    </Card>
+  );
+};
