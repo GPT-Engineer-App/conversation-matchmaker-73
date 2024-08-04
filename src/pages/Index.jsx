@@ -34,18 +34,18 @@ const Index = () => {
             <h2 className="text-xl font-semibold">{user.name}</h2>
             <p className="text-sm text-gray-600">{user.current_title}</p>
           </div>
-          <Card className="mb-4 p-4">
+          <Card className="mb-4 p-4 shadow-lg transform hover:scale-105 transition-transform duration-300 bg-white rounded-lg">
             <h2 className="font-semibold mb-2">Basic Info</h2>
             <p>Company: {user.company_name || 'Veloxforce'}</p>
             <p>Location: {user.location}</p>
             <p>Industry: {user.industry || 'AI/Software'}</p>
           </Card>
-          <Card className="mb-4 p-4">
+          <Card className="mb-4 p-4 shadow-lg transform hover:scale-105 transition-transform duration-300 bg-white rounded-lg">
             <h2 className="font-semibold mb-2">Contact</h2>
             <p>Email: {user.main_email}</p>
             <p>LinkedIn: <a href={user.linkedin_url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Profile</a></p>
           </Card>
-          <Card className="mb-4 p-4">
+          <Card className="mb-4 p-4 shadow-lg transform hover:scale-105 transition-transform duration-300 bg-white rounded-lg">
             <h2 className="font-semibold mb-2">Company</h2>
             <p>Website: <a href={user.company_website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Veloxforce</a></p>
             <p>LinkedIn: <a href={user.company_linkedin} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Company Page</a></p>
