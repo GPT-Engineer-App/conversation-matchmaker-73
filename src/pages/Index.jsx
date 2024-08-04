@@ -195,16 +195,19 @@ const FullProfileContent = ({ match, matchedUserDetails }) => {
   const renderInfoBox = (title, items) => (
     <div className="bg-white p-6 rounded-lg shadow-lg mb-6 border border-gray-200 transition-all duration-300 ease-in-out hover:shadow-xl hover:scale-105 w-full">
       <h3 className="text-xl font-semibold mb-4 text-blue-600">{title}</h3>
-      {items.map(({ label, value }) => 
-        value && (
-          <div key={label} className="mb-3">
-            <div className="font-medium">{label}</div>
-            <div className="bg-gray-100 rounded-md p-2 mt-1">
-              {Array.isArray(value) ? value.join(', ') : value}
+      {items.map(({ label, value }) => {
+        if (value && (!Array.isArray(value) || value.length > 0)) {
+          return (
+            <div key={label} className="mb-3">
+              <div className="font-medium">{label}</div>
+              <div className="bg-gray-100 rounded-md p-2 mt-1">
+                {Array.isArray(value) ? value.join(', ') : value}
+              </div>
             </div>
-          </div>
-        )
-      )}
+          );
+        }
+        return null;
+      })}
     </div>
   );
 
@@ -263,16 +266,36 @@ const MatchCard = ({ match, isExpanded, onExpand }) => {
         >
           {isContentVisible && (
             <>
-              <p className="mb-2 font-semibold">Potential Collaboration</p>
-              <p className="mb-4">{match.potential_collaboration}</p>
-              <p className="mb-2 font-semibold">Explanation</p>
-              <p className="mb-4">{match.explanation}</p>
-              <p className="mb-2 font-semibold">Industry</p>
-              <p className="mb-4">{matchedUserDetails?.industry}</p>
-              <p className="mb-2 font-semibold">Areas of Expertise</p>
-              <p className="mb-4">{matchedUserDetails?.areas_of_expertise?.join(', ')}</p>
-              <p className="mb-2 font-semibold">AI Technologies Used</p>
-              <p className="mb-4">{matchedUserDetails?.ai_technologies_used?.join(', ')}</p>
+              {match.potential_collaboration && (
+                <>
+                  <p className="mb-2 font-semibold">Potential Collaboration</p>
+                  <p className="mb-4">{match.potential_collaboration}</p>
+                </>
+              )}
+              {match.explanation && (
+                <>
+                  <p className="mb-2 font-semibold">Explanation</p>
+                  <p className="mb-4">{match.explanation}</p>
+                </>
+              )}
+              {matchedUserDetails?.industry && (
+                <>
+                  <p className="mb-2 font-semibold">Industry</p>
+                  <p className="mb-4">{matchedUserDetails.industry}</p>
+                </>
+              )}
+              {matchedUserDetails?.areas_of_expertise?.length > 0 && (
+                <>
+                  <p className="mb-2 font-semibold">Areas of Expertise</p>
+                  <p className="mb-4">{matchedUserDetails.areas_of_expertise.join(', ')}</p>
+                </>
+              )}
+              {matchedUserDetails?.ai_technologies_used?.length > 0 && (
+                <>
+                  <p className="mb-2 font-semibold">AI Technologies Used</p>
+                  <p className="mb-4">{matchedUserDetails.ai_technologies_used.join(', ')}</p>
+                </>
+              )}
               <div className="flex justify-end mt-4">
                 <Dialog>
                   <DialogTrigger asChild>
