@@ -33,10 +33,10 @@ const Index = () => {
   }, [userId, userMatches, allUsers]);
 
   useEffect(() => {
-    if (matches && matches.length > 0 && !expandedMatchId) {
-      setExpandedMatchId(matches[0].id);
+    if (processedMatches && processedMatches.length > 0 && !expandedMatchId) {
+      setExpandedMatchId(processedMatches[0].id);
     }
-  }, [matches, expandedMatchId]);
+  }, [processedMatches, expandedMatchId]);
 
   const handleExpand = (matchId) => {
     setExpandedMatchId(matchId === expandedMatchId ? null : matchId);
@@ -145,7 +145,7 @@ const Index = () => {
             <div className="text-center py-8">
               <p className="text-lg text-red-600">Error loading matches: {userMatchesError.message}</p>
             </div>
-          ) : processedMatches.length > 0 ? (
+          ) : processedMatches && processedMatches.length > 0 ? (
             processedMatches.map((match) => (
               <MatchCard
                 key={match.id}
