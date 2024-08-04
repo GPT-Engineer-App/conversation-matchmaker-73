@@ -47,7 +47,46 @@ const Index = () => {
             </div>
           </Card>
           
-          <Button className="w-full mt-4">Expand Profile</Button>
+          {/* CompanyInfo */}
+          <Card className="p-4 shadow-lg bg-white rounded-lg">
+            <h3 className="font-bold mb-2">Company Information</h3>
+            <p><span className="font-semibold">Company:</span> {user.company_name || 'Veloxforce'}</p>
+            <p><span className="font-semibold">Website:</span> <a href={user.company_website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Veloxforce</a></p>
+            <p><span className="font-semibold">Company LinkedIn:</span> <a href={user.company_linkedin} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Company Page</a></p>
+          </Card>
+          
+          {/* ContactDetails */}
+          <Card className="p-4 shadow-lg bg-white rounded-lg">
+            <h3 className="font-bold mb-2">Contact Details</h3>
+            <p><span className="font-semibold">Main Email:</span> {user.main_email}</p>
+            <p><span className="font-semibold">Secondary Email:</span> {user.secondary_email}</p>
+            <p><span className="font-semibold">Phone:</span> {user.phone_number}</p>
+            <p><span className="font-semibold">Location:</span> {user.location}</p>
+            <p><span className="font-semibold">LinkedIn:</span> <a href={user.linkedin_url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Profile</a></p>
+          </Card>
+          
+          {/* SkillsDisplay */}
+          <Card className="p-4 shadow-lg bg-white rounded-lg">
+            <h3 className="font-bold mb-2">Skills & Expertise</h3>
+            <div className="mb-2">
+              <h4 className="font-semibold">Key Skills:</h4>
+              <ul className="list-disc list-inside">
+                {user.skills?.slice(0, 5).map((skill, index) => (
+                  <li key={index}>{skill}</li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h4 className="font-semibold">Areas of Expertise:</h4>
+              <ul className="list-disc list-inside">
+                {user.areas_of_expertise?.slice(0, 5).map((area, index) => (
+                  <li key={index}>{area}</li>
+                ))}
+              </ul>
+            </div>
+          </Card>
+          
+          <Button className="w-full">Expand Profile</Button>
         </div>
 
         {/* Main content area - Matches */}
