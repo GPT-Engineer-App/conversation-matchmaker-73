@@ -93,7 +93,7 @@ const Index = () => {
                 </div>
               </Card>
               
-              <Card className="p-4 shadow-lg bg-white rounded-lg space-y-4 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+              <Card className="p-4 shadow-lg bg-white rounded-lg space-y-4 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:scale-105 border border-gray-200 hover:border-gray-300">
                 <div>
                   <p className="font-semibold">Email</p>
                   <p>{user.main_email}</p>
@@ -104,7 +104,7 @@ const Index = () => {
                 </div>
               </Card>
               
-              <Card className="p-4 shadow-lg bg-white rounded-lg space-y-4 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+              <Card className="p-4 shadow-lg bg-white rounded-lg space-y-4 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:scale-105 border border-gray-200 hover:border-gray-300">
                 <div>
                   <p className="font-semibold">Website</p>
                   <a href={user.company_website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Veloxforce</a>
