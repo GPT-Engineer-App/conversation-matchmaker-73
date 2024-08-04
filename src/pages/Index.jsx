@@ -6,10 +6,12 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useUserMatchmaker } from '@/integrations/supabase';
 
 const Index = () => {
-  const { data: user, isLoading, error } = useUserMatchmaker('current-user-id'); // Replace with actual user ID
+  const userId = '333e05cd-70b9-4455-b15c-928c890bdd02'; // Marius Wilsch's ID
+  const { data: user, isLoading, error } = useUserMatchmaker(userId);
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
+  if (!user) return <div>User not found</div>;
   return (
     <div className="min-h-screen flex flex-col bg-gray-100">
       {/* Header */}
@@ -30,29 +32,23 @@ const Index = () => {
               <AvatarFallback>{user.name?.charAt(0) || 'U'}</AvatarFallback>
             </Avatar>
             <h2 className="text-xl font-semibold">{user.name}</h2>
-            <p className="text-sm text-gray-600">{user.job_title}</p>
+            <p className="text-sm text-gray-600">{user.current_title}</p>
           </div>
           <Card className="mb-4 p-4">
             <h2 className="font-semibold mb-2">Basic Info</h2>
-            <p>Company: {user.company_name}</p>
+            <p>Company: {user.company_name || 'Veloxforce'}</p>
             <p>Location: {user.location}</p>
-            <p>Industry: {user.industry}</p>
+            <p>Industry: {user.industry || 'AI/Software'}</p>
           </Card>
           <Card className="mb-4 p-4">
-            <h2 className="font-semibold mb-2">Key Skills</h2>
-            <ul className="list-disc list-inside">
-              {user.skills?.slice(0, 5).map((skill, index) => (
-                <li key={index}>{skill}</li>
-              ))}
-            </ul>
+            <h2 className="font-semibold mb-2">Contact</h2>
+            <p>Email: {user.main_email}</p>
+            <p>LinkedIn: <a href={user.linkedin_url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Profile</a></p>
           </Card>
           <Card className="mb-4 p-4">
-            <h2 className="font-semibold mb-2">Goals</h2>
-            <ul className="list-disc list-inside">
-              {user.business_goals?.slice(0, 3).map((goal, index) => (
-                <li key={index}>{goal}</li>
-              ))}
-            </ul>
+            <h2 className="font-semibold mb-2">Company</h2>
+            <p>Website: <a href={user.company_website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Veloxforce</a></p>
+            <p>LinkedIn: <a href={user.company_linkedin} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Company Page</a></p>
           </Card>
           <Button className="w-full">Expand Profile</Button>
         </div>
