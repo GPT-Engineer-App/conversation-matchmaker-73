@@ -120,7 +120,7 @@ const Index = () => {
                 </div>
               </Card>
               
-              <Button className="w-full bg-indigo-900 text-white hover:bg-indigo-800">Expand Profile</Button>
+              <Button className="w-full bg-blue-900 text-white hover:bg-blue-800">Expand Profile</Button>
             </>
           ) : (
             <div>User not found</div>
@@ -315,7 +315,7 @@ const MatchCard = ({ match, isExpanded, onExpand }) => {
                 <div className="flex justify-start space-x-2">
                   <Dialog>
                     <DialogTrigger asChild>
-                      <Button size="sm" onClick={(e) => e.stopPropagation()}>View Full Profile</Button>
+                      <Button size="sm" className="bg-blue-900 text-white hover:bg-blue-800" onClick={(e) => e.stopPropagation()}>View Full Profile</Button>
                     </DialogTrigger>
                     <DialogContent className="w-11/12 max-w-4xl h-[90vh] max-h-[90vh]">
                       <ScrollArea className="h-full pr-4">
@@ -325,8 +325,8 @@ const MatchCard = ({ match, isExpanded, onExpand }) => {
                       </ScrollArea>
                     </DialogContent>
                   </Dialog>
-                  <Button size="sm" onClick={(e) => e.stopPropagation()}>Connect</Button>
-                  <Button size="sm" variant="outline" as="a" href={matchedUserDetails?.linkedin_url} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}>LinkedIn Profile</Button>
+                  <Button size="sm" className="bg-blue-900 text-white hover:bg-blue-800" onClick={(e) => e.stopPropagation()}>Connect</Button>
+                  <Button size="sm" variant="outline" className="border-blue-900 text-blue-900 hover:bg-blue-100" as="a" href={matchedUserDetails?.linkedin_url} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}>LinkedIn Profile</Button>
                 </div>
               </div>
             </>
