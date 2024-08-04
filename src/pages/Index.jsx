@@ -37,7 +37,8 @@ const Index = () => {
     setExpandedMatchId(matchId === expandedMatchId ? null : matchId);
   };
 
-  if (matchesLoading || allUsersLoading) return <div>Loading...</div>;
+  if (userLoading || matchesLoading || allUsersLoading) return <div>Loading...</div>;
+  if (userError) return <div>Error loading user: {userError.message}</div>;
   if (matchesError) return <div>Error loading matches: {matchesError.message}</div>;
   if (allUsersError) return <div>Error loading all users: {allUsersError.message}</div>;
 
@@ -132,7 +133,7 @@ const Index = () => {
           </Tabs>
 
           {/* Match summaries */}
-          {userMatches.length > 0 ? userMatches.map((match) => (
+          {matches && matches.length > 0 ? matches.map((match) => (
             <MatchCard
               key={match.id}
               match={match}
