@@ -3,7 +3,7 @@ import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useUserMatchmaker, useMatches, useUsersMatchmakers } from '@/integrations/supabase';
+import { useUserMatchmaker, useGetMatchesByUserId, useUsersMatchmakers } from '@/integrations/supabase';
 import { ChevronRight, ChevronLeft } from 'lucide-react';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -12,21 +12,20 @@ import { Input } from '@/components/ui/input';
 const Index = () => {
   const [userId, setUserId] = useState('333e05cd-70b9-4455-b15c-928c890bdd02'); // Default to Marius Wilsch's ID
   const [expandedMatchId, setExpandedMatchId] = useState(null);
-  const [userMatches, setUserMatches] = useState([]);
 
   const { data: user, isLoading: userLoading, error: userError } = useUserMatchmaker(userId);
-  const { data: matches, isLoading: matchesLoading, error: matchesError } = useMatches();
+  const { data: matches, isLoading: matchesLoading, error: matchesError } = useGetMatchesByUserId(userId);
   const { data: allUsers, isLoading: allUsersLoading, error: allUsersError } = useUsersMatchmakers();
 
-  useEffect(() => {
+  const userMatches = React.useMemo(() => {
     if (matches && allUsers) {
-      const filteredMatches = matches.filter(match => match.user_id === userId).map(match => {
-        const matchedUser = allUsers.find(u => u.id === match.matched_user_id);
-        return { ...match, matchedUserDetails: matchedUser };
-      });
-      setUserMatches(filteredMatches);
+      return matches.map(match => ({
+        ...match,
+        matchedUserDetails: allUsers.find(u => u.id === match.matched_user_id)
+      }));
     }
-  }, [userId, matches, allUsers]);
+    return [];
+  }, [matches, allUsers]);
 
   useEffect(() => {
     if (matches && matches.length > 0 && !expandedMatchId) {

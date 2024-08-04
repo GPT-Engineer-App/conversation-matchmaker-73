@@ -106,6 +106,12 @@ export const useMatch = (matchId) => useQuery({
     queryFn: () => fromSupabase(supabase.from('matches_matchmaker').select('*').eq('id', matchId).single())
 });
 
+export const useGetMatchesByUserId = (userId) => useQuery({
+    queryKey: ['matches_matchmaker', userId],
+    queryFn: () => fromSupabase(supabase.from('matches_matchmaker').select('*').eq('user_id', userId)),
+    enabled: !!userId
+});
+
 export const useAddMatch = () => {
     const queryClient = useQueryClient();
     return useMutation({
