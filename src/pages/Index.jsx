@@ -12,7 +12,6 @@ const Index = () => {
   const { data: matches, isLoading: matchesLoading, error: matchesError } = useMatches();
   const { data: allUsers, isLoading: allUsersLoading, error: allUsersError } = useUsersMatchmakers();
   const [expandedMatchId, setExpandedMatchId] = useState(null);
-  const [isTransitioning, setIsTransitioning] = useState(false);
 
   useEffect(() => {
     if (matches && matches.length > 0 && !expandedMatchId) {
@@ -32,18 +31,7 @@ const Index = () => {
   }) || [];
 
   const handleExpand = (matchId) => {
-    if (isTransitioning) return;
-    setIsTransitioning(true);
-    if (expandedMatchId === matchId) {
-      setExpandedMatchId(null);
-      setTimeout(() => setIsTransitioning(false), 300);
-    } else {
-      setExpandedMatchId(null);
-      setTimeout(() => {
-        setExpandedMatchId(matchId);
-        setIsTransitioning(false);
-      }, 300);
-    }
+    setExpandedMatchId(matchId === expandedMatchId ? null : matchId);
   };
   return (
     <div className="min-h-screen flex flex-col bg-gray-100">
@@ -179,10 +167,8 @@ const MatchCard = ({ match, isExpanded, onExpand }) => {
             </div>
           </div>
           <div 
-            className={`mt-4 overflow-hidden ${
-              isExpanded 
-                ? 'max-h-[1000px] opacity-100 transition-all duration-300 ease-in-out' 
-                : 'max-h-0 opacity-0'
+            className={`mt-4 overflow-hidden transition-all duration-300 ease-in-out ${
+              isExpanded ? 'max-h-[1000px] opacity-100' : 'max-h-0 opacity-0'
             }`}
           >
             <p className="mb-2 font-semibold">Potential Collaboration</p>
