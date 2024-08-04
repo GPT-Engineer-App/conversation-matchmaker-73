@@ -44,61 +44,54 @@ const Index = () => {
 
       {/* Main content */}
       <div className="flex flex-1 p-4">
-        {/* Left sidebar - User Profile */}
-        <div className="w-[25%] mr-4 space-y-4">
-          <Card className="p-4 shadow-lg bg-white rounded-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-            <div className="flex flex-col items-center">
-              <Avatar className="w-24 h-24 mb-2">
+        <div className="w-full space-y-4">
+          {/* User Profile Card */}
+          <Card 
+            className="p-4 shadow-lg bg-white rounded-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer"
+            onClick={() => setExpandedMatchId(expandedMatchId ? null : 'profile')}
+          >
+            <div className="flex items-center">
+              <Avatar className="w-24 h-24 mr-4">
                 <AvatarImage src={user.image_url || "/placeholder.svg"} alt={user.name} />
                 <AvatarFallback>{user.name?.charAt(0) || 'U'}</AvatarFallback>
               </Avatar>
-              <h2 className="text-xl font-semibold">{user.name}</h2>
-              <p className="text-sm text-gray-600 text-center mt-2">{user.current_title}</p>
+              <div>
+                <h2 className="text-xl font-semibold">{user.name}</h2>
+                <p className="text-sm text-gray-600">{user.current_title}</p>
+                <p className="text-sm text-gray-600">{user.company_name || 'Veloxforce'}</p>
+              </div>
             </div>
+            {expandedMatchId === 'profile' && (
+              <div className="mt-4 space-y-4">
+                <div>
+                  <p className="font-semibold">Location</p>
+                  <p>{user.location || 'Munich, Bavaria, Germany'}</p>
+                </div>
+                <div>
+                  <p className="font-semibold">Industry</p>
+                  <p>{user.industry || 'AI/Software'}</p>
+                </div>
+                <div>
+                  <p className="font-semibold">Email</p>
+                  <p>{user.main_email}</p>
+                </div>
+                <div>
+                  <p className="font-semibold">LinkedIn</p>
+                  <a href={user.linkedin_url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Profile</a>
+                </div>
+                <div>
+                  <p className="font-semibold">Website</p>
+                  <a href={user.company_website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Veloxforce</a>
+                </div>
+                <div>
+                  <p className="font-semibold">Company LinkedIn</p>
+                  <a href={user.company_linkedin} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Company Page</a>
+                </div>
+              </div>
+            )}
           </Card>
-          
-          <Card className="p-4 shadow-lg bg-white rounded-lg space-y-4 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-            <div>
-              <p className="font-semibold">Company</p>
-              <p>{user.company_name || 'Veloxforce'}</p>
-            </div>
-            <div>
-              <p className="font-semibold">Location</p>
-              <p>{user.location || 'Munich, Bavaria, Germany'}</p>
-            </div>
-            <div>
-              <p className="font-semibold">Industry</p>
-              <p>{user.industry || 'AI/Software'}</p>
-            </div>
-          </Card>
-          
-          <Card className="p-4 shadow-lg bg-white rounded-lg space-y-4 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-            <div>
-              <p className="font-semibold">Email</p>
-              <p>{user.main_email}</p>
-            </div>
-            <div>
-              <p className="font-semibold">LinkedIn</p>
-              <a href={user.linkedin_url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Profile</a>
-            </div>
-          </Card>
-          
-          <Card className="p-4 shadow-lg bg-white rounded-lg space-y-4 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-            <div>
-              <p className="font-semibold">Website</p>
-              <a href={user.company_website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Veloxforce</a>
-            </div>
-            <div>
-              <p className="font-semibold">Company LinkedIn</p>
-              <a href={user.company_linkedin} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Company Page</a>
-            </div>
-          </Card>
-          
-          <Button className="w-full bg-indigo-900 text-white hover:bg-indigo-800">Expand Profile</Button>
-        </div>
 
-        {/* Main content area - Matches */}
-        <div className="w-[75%]">
+          {/* Matches */}
           <Tabs defaultValue="list" className="mb-4">
             <TabsList>
               <TabsTrigger value="list">List View</TabsTrigger>
@@ -132,23 +125,13 @@ export default Index;
 
 const MatchCard = ({ match, isExpanded, onExpand }) => {
   return (
-    <Card key={match.id} className="mb-4 overflow-hidden">
-      <div className="flex">
-        {/* Sidebar */}
-        <div 
-          className="w-[5%] bg-gray-100 flex flex-col items-center justify-center cursor-pointer transition-all duration-300 ease-in-out" 
-          onClick={onExpand}
-        >
-          {isExpanded ? (
-            <ChevronLeft className="h-6 w-6 text-gray-600 transition-transform duration-300 ease-in-out" />
-          ) : (
-            <ChevronRight className="h-6 w-6 text-gray-600 transition-transform duration-300 ease-in-out" />
-          )}
-        </div>
-
-        {/* Main content */}
-        <div className="w-[95%] p-4">
-          <div className="flex items-center justify-between">
+    <Card 
+      key={match.id} 
+      className="mb-4 overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer"
+      onClick={onExpand}
+    >
+      <div className="p-4">
+        <div className="flex items-center justify-between">
             <div className="flex items-center">
               <Avatar className="w-16 h-16 mr-4">
                 <AvatarImage src={match.matched_user_image || "/placeholder.svg"} alt={match.matched_user_name} />
