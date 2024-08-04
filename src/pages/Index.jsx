@@ -49,7 +49,6 @@ const Index = () => {
           
           {/* CompanyInfo */}
           <Card className="p-4 shadow-lg bg-white rounded-lg">
-            <h3 className="font-bold mb-2">Company Information</h3>
             <p><span className="font-semibold">Company:</span> {user.company_name || 'Veloxforce'}</p>
             <p><span className="font-semibold">Website:</span> <a href={user.company_website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Veloxforce</a></p>
             <p><span className="font-semibold">Company LinkedIn:</span> <a href={user.company_linkedin} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Company Page</a></p>
@@ -57,7 +56,6 @@ const Index = () => {
           
           {/* ContactDetails */}
           <Card className="p-4 shadow-lg bg-white rounded-lg">
-            <h3 className="font-bold mb-2">Contact Details</h3>
             <p><span className="font-semibold">Main Email:</span> {user.main_email}</p>
             <p><span className="font-semibold">Secondary Email:</span> {user.secondary_email}</p>
             <p><span className="font-semibold">Phone:</span> {user.phone_number}</p>
@@ -67,7 +65,6 @@ const Index = () => {
           
           {/* SkillsDisplay */}
           <Card className="p-4 shadow-lg bg-white rounded-lg">
-            <h3 className="font-bold mb-2">Skills & Expertise</h3>
             <div className="mb-2">
               <h4 className="font-semibold">Key Skills:</h4>
               <ul className="list-disc list-inside">
