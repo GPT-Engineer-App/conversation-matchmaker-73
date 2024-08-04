@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useUserMatchmaker, useMatches, useUsersMatchmakers } from '@/integrations/supabase';
-import { ChevronDown, ChevronUp } from 'lucide-react';
+import { ChevronDown, ChevronUp, ChevronRight, ChevronLeft } from 'lucide-react';
 
 const Index = () => {
   const userId = '333e05cd-70b9-4455-b15c-928c890bdd02'; // Marius Wilsch's ID
@@ -98,54 +98,52 @@ const MatchCard = ({ match }) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
-    <Card key={match.id} className="mb-4 p-4">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center">
-          <Avatar className="w-16 h-16 mr-4">
-            <AvatarImage src={match.matched_user_image || "/placeholder.svg"} alt={match.matched_user_name} />
-            <AvatarFallback>{match.matched_user_name?.charAt(0) || 'U'}</AvatarFallback>
-          </Avatar>
-          <div>
-            <h2 className="text-lg font-semibold">{match.matched_user_name}</h2>
-            <p className="text-sm text-gray-600">{match.matchedUserDetails?.current_title}</p>
-            <p className="text-sm text-gray-600">{match.matchedUserDetails?.company_name}</p>
-          </div>
+    <Card key={match.id} className="mb-4 overflow-hidden">
+      <div className="flex">
+        {/* Sidebar */}
+        <div className="w-[10%] bg-gray-100 flex flex-col items-center justify-center cursor-pointer" onClick={() => setIsExpanded(!isExpanded)}>
+          {isExpanded ? (
+            <ChevronLeft className="h-6 w-6 text-gray-600" />
+          ) : (
+            <ChevronRight className="h-6 w-6 text-gray-600" />
+          )}
         </div>
-        <div className="text-right">
-          <p className="text-2xl font-bold text-blue-600">{match.matching_score}</p>
-          <p className="text-sm text-gray-600">Match Score</p>
-          <p className="text-sm text-gray-600">{match.matchedUserDetails?.location}</p>
+
+        {/* Main content */}
+        <div className="w-[90%] p-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center">
+              <Avatar className="w-16 h-16 mr-4">
+                <AvatarImage src={match.matched_user_image || "/placeholder.svg"} alt={match.matched_user_name} />
+                <AvatarFallback>{match.matched_user_name?.charAt(0) || 'U'}</AvatarFallback>
+              </Avatar>
+              <div>
+                <h2 className="text-lg font-semibold">{match.matched_user_name}</h2>
+                <p className="text-sm text-gray-600">{match.matchedUserDetails?.current_title}</p>
+                <p className="text-sm text-gray-600">{match.matchedUserDetails?.company_name}</p>
+              </div>
+            </div>
+            <div className="text-right">
+              <p className="text-2xl font-bold text-blue-600">{match.matching_score}</p>
+              <p className="text-sm text-gray-600">Match Score</p>
+              <p className="text-sm text-gray-600">{match.matchedUserDetails?.location}</p>
+            </div>
+          </div>
+          {isExpanded && (
+            <div className="mt-4">
+              <p className="mb-2 font-semibold">Potential Collaboration</p>
+              <p className="mb-4">{match.potential_collaboration}</p>
+              <p className="mb-2 font-semibold">Explanation</p>
+              <p className="mb-4">{match.explanation}</p>
+              <div className="flex justify-end mt-4">
+                <Button size="sm" className="mr-2">View Full Profile</Button>
+                <Button size="sm" className="mr-2">Connect</Button>
+                <Button size="sm" variant="outline" as="a" href={match.matched_user_linkedin} target="_blank" rel="noopener noreferrer">LinkedIn Profile</Button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
-      <Button
-        variant="ghost"
-        size="sm"
-        className="mt-2 w-full flex items-center justify-center"
-        onClick={() => setIsExpanded(!isExpanded)}
-      >
-        {isExpanded ? (
-          <>
-            Hide Details <ChevronUp className="ml-2 h-4 w-4" />
-          </>
-        ) : (
-          <>
-            Show Details <ChevronDown className="ml-2 h-4 w-4" />
-          </>
-        )}
-      </Button>
-      {isExpanded && (
-        <div className="mt-4">
-          <p className="mb-2 font-semibold">Potential Collaboration</p>
-          <p className="mb-4">{match.potential_collaboration}</p>
-          <p className="mb-2 font-semibold">Explanation</p>
-          <p className="mb-4">{match.explanation}</p>
-          <div className="flex justify-end mt-4">
-            <Button size="sm" className="mr-2">View Full Profile</Button>
-            <Button size="sm" className="mr-2">Connect</Button>
-            <Button size="sm" variant="outline" as="a" href={match.matched_user_linkedin} target="_blank" rel="noopener noreferrer">LinkedIn Profile</Button>
-          </div>
-        </div>
-      )}
     </Card>
   );
 };
