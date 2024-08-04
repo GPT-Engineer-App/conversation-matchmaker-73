@@ -165,7 +165,6 @@ const MatchCard = ({ match, isExpanded, onExpand }) => {
             </div>
           </div>
         </div>
-      </div>
     </Card>
   );
 };
