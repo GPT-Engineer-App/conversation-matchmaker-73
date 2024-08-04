@@ -238,8 +238,14 @@ const MatchCard = ({ match, isExpanded, onExpand }) => {
     return <div>Loading match details...</div>;
   }
 
+  const handleCardClick = (e) => {
+    // Prevent the click event from propagating to parent elements
+    e.stopPropagation();
+    onExpand();
+  };
+
   return (
-    <Card key={match.id} className="mb-4 overflow-hidden cursor-pointer transition-all duration-300 hover:shadow-xl hover:scale-102 border border-gray-200 hover:border-gray-300" onClick={onExpand}>
+    <Card key={match.id} className="mb-4 overflow-hidden cursor-pointer transition-all duration-300 hover:shadow-xl hover:scale-102 border border-gray-200 hover:border-gray-300" onClick={handleCardClick}>
       <div className="p-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center">
@@ -299,7 +305,7 @@ const MatchCard = ({ match, isExpanded, onExpand }) => {
               <div className="flex justify-end mt-4">
                 <Dialog>
                   <DialogTrigger asChild>
-                    <Button size="sm" className="mr-2">View Full Profile</Button>
+                    <Button size="sm" className="mr-2" onClick={(e) => e.stopPropagation()}>View Full Profile</Button>
                   </DialogTrigger>
                   <DialogContent className="w-11/12 max-w-4xl h-[90vh] max-h-[90vh]">
                     <ScrollArea className="h-full pr-4">
@@ -309,8 +315,8 @@ const MatchCard = ({ match, isExpanded, onExpand }) => {
                     </ScrollArea>
                   </DialogContent>
                 </Dialog>
-                <Button size="sm" className="mr-2">Connect</Button>
-                <Button size="sm" variant="outline" as="a" href={matchedUserDetails?.linkedin_url} target="_blank" rel="noopener noreferrer">LinkedIn Profile</Button>
+                <Button size="sm" className="mr-2" onClick={(e) => e.stopPropagation()}>Connect</Button>
+                <Button size="sm" variant="outline" as="a" href={matchedUserDetails?.linkedin_url} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}>LinkedIn Profile</Button>
               </div>
             </>
           )}
