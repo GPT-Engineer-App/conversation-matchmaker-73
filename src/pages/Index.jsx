@@ -132,7 +132,7 @@ const Index = () => {
           ) : (
             <div>User not found</div>
           )}
-        </div>
+        </motion.div>
 
         {/* Main content area - Matches */}
         <motion.div 
