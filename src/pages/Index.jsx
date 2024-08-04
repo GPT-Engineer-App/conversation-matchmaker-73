@@ -53,7 +53,7 @@ const Index = () => {
       {/* Header */}
       <header className="bg-white p-4 shadow-sm">
         <div className="flex items-center justify-between">
-          <span className="text-xl font-bold text-blue-600">MatchMaker</span>
+          <span className="text-xl font-bold text-blue-700">MatchMaker</span>
         </div>
       </header>
 
@@ -120,7 +120,7 @@ const Index = () => {
                 </div>
               </Card>
               
-              <Button className="w-full bg-blue-900 text-white hover:bg-blue-800">Expand Profile</Button>
+              <Button className="w-full bg-blue-950 text-white hover:bg-blue-900">Expand Profile</Button>
             </>
           ) : (
             <div>User not found</div>
@@ -202,7 +202,7 @@ const FullProfileContent = ({ match, matchedUserDetails }) => {
 
   const renderInfoBox = (title, items) => (
     <div className="bg-white p-6 rounded-lg shadow-lg mb-6 border border-gray-200 transition-all duration-300 ease-in-out hover:shadow-xl hover:scale-105 w-full">
-      <h3 className="text-xl font-semibold mb-4 text-blue-600">{title}</h3>
+      <h3 className="text-xl font-semibold mb-4 text-blue-700">{title}</h3>
       {items.map(({ label, value }) => {
         if (value && (!Array.isArray(value) || value.length > 0)) {
           return (
@@ -268,7 +268,7 @@ const MatchCard = ({ match, isExpanded, onExpand }) => {
             </div>
           </div>
           <div className="text-right">
-            <p className="text-2xl font-bold text-blue-600">{match.matching_score}</p>
+            <p className="text-2xl font-bold text-blue-700">{match.matching_score}</p>
             <p className="text-sm text-gray-600">Match Score</p>
             <p className="text-sm text-gray-600">{matchedUserDetails?.location}</p>
           </div>
@@ -315,7 +315,7 @@ const MatchCard = ({ match, isExpanded, onExpand }) => {
                 <div className="flex justify-start space-x-2">
                   <Dialog>
                     <DialogTrigger asChild>
-                      <Button size="sm" className="bg-blue-900 text-white hover:bg-blue-800" onClick={(e) => e.stopPropagation()}>View Full Profile</Button>
+                      <Button size="sm" className="bg-blue-950 text-white hover:bg-blue-900" onClick={(e) => e.stopPropagation()}>View Full Profile</Button>
                     </DialogTrigger>
                     <DialogContent className="w-11/12 max-w-4xl h-[90vh] max-h-[90vh]">
                       <ScrollArea className="h-full pr-4">
@@ -325,8 +325,8 @@ const MatchCard = ({ match, isExpanded, onExpand }) => {
                       </ScrollArea>
                     </DialogContent>
                   </Dialog>
-                  <Button size="sm" className="bg-blue-900 text-white hover:bg-blue-800" onClick={(e) => e.stopPropagation()}>Connect</Button>
-                  <Button size="sm" variant="outline" className="border-blue-900 text-blue-900 hover:bg-blue-100" as="a" href={matchedUserDetails?.linkedin_url} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}>LinkedIn Profile</Button>
+                  <Button size="sm" className="bg-blue-950 text-white hover:bg-blue-900" onClick={(e) => e.stopPropagation()}>Connect</Button>
+                  <Button size="sm" variant="outline" className="border-blue-950 text-blue-950 hover:bg-blue-100" as="a" href={matchedUserDetails?.linkedin_url} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}>LinkedIn Profile</Button>
                 </div>
               </div>
             </>
