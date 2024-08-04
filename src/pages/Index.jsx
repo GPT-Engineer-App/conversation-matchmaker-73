@@ -166,13 +166,13 @@ const FullProfileContent = ({ match }) => {
   ];
 
   const renderInfoBox = (title, items) => (
-    <div className="bg-gray-100 p-6 rounded-lg shadow-lg mb-6 border border-gray-200 transition-all duration-300 hover:shadow-2xl hover:transform hover:scale-[1.02]">
+    <div className="bg-white p-6 rounded-lg shadow-lg mb-6 border border-gray-200">
       <h3 className="text-xl font-semibold mb-4 text-blue-600">{title}</h3>
       {items.map(({ label, value }) => 
         value && (
           <div key={label} className="mb-3">
             <div className="font-medium">{label}</div>
-            <div className="bg-white rounded-md p-2 mt-1">
+            <div className="bg-gray-100 rounded-md p-2 mt-1">
               {Array.isArray(value) ? value.join(', ') : value}
             </div>
           </div>
