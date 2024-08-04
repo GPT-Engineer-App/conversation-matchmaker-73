@@ -135,11 +135,14 @@ const MatchCard = ({ match, isExpanded, onExpand }) => {
     <Card key={match.id} className="mb-4 overflow-hidden">
       <div className="flex">
         {/* Sidebar */}
-        <div className="w-[5%] bg-gray-100 flex flex-col items-center justify-center cursor-pointer" onClick={onExpand}>
+        <div 
+          className="w-[5%] bg-gray-100 flex flex-col items-center justify-center cursor-pointer transition-all duration-300 ease-in-out" 
+          onClick={onExpand}
+        >
           {isExpanded ? (
-            <ChevronLeft className="h-6 w-6 text-gray-600" />
+            <ChevronLeft className="h-6 w-6 text-gray-600 transition-transform duration-300 ease-in-out" />
           ) : (
-            <ChevronRight className="h-6 w-6 text-gray-600" />
+            <ChevronRight className="h-6 w-6 text-gray-600 transition-transform duration-300 ease-in-out" />
           )}
         </div>
 
@@ -163,19 +166,21 @@ const MatchCard = ({ match, isExpanded, onExpand }) => {
               <p className="text-sm text-gray-600">{match.matchedUserDetails?.location}</p>
             </div>
           </div>
-          {isExpanded && (
-            <div className="mt-4">
-              <p className="mb-2 font-semibold">Potential Collaboration</p>
-              <p className="mb-4">{match.potential_collaboration}</p>
-              <p className="mb-2 font-semibold">Explanation</p>
-              <p className="mb-4">{match.explanation}</p>
-              <div className="flex justify-end mt-4">
-                <Button size="sm" className="mr-2">View Full Profile</Button>
-                <Button size="sm" className="mr-2">Connect</Button>
-                <Button size="sm" variant="outline" as="a" href={match.matched_user_linkedin} target="_blank" rel="noopener noreferrer">LinkedIn Profile</Button>
-              </div>
+          <div 
+            className={`mt-4 overflow-hidden transition-all duration-300 ease-in-out ${
+              isExpanded ? 'max-h-[1000px] opacity-100' : 'max-h-0 opacity-0'
+            }`}
+          >
+            <p className="mb-2 font-semibold">Potential Collaboration</p>
+            <p className="mb-4">{match.potential_collaboration}</p>
+            <p className="mb-2 font-semibold">Explanation</p>
+            <p className="mb-4">{match.explanation}</p>
+            <div className="flex justify-end mt-4">
+              <Button size="sm" className="mr-2">View Full Profile</Button>
+              <Button size="sm" className="mr-2">Connect</Button>
+              <Button size="sm" variant="outline" as="a" href={match.matched_user_linkedin} target="_blank" rel="noopener noreferrer">LinkedIn Profile</Button>
             </div>
-          )}
+          </div>
         </div>
       </div>
     </Card>
