@@ -19,10 +19,15 @@ const Index = () => {
 
   const userMatches = React.useMemo(() => {
     if (matches && allUsers) {
-      return matches.map(match => ({
-        ...match,
-        matchedUserDetails: allUsers.find(u => u.id === match.matched_user_id)
-      }));
+      return matches.map(match => {
+        const matchedUserDetails = allUsers.find(u => u.id === match.matched_user_id);
+        return {
+          ...match,
+          matchedUserDetails,
+          matched_user_name: matchedUserDetails?.name,
+          matched_user_image: matchedUserDetails?.image_url
+        };
+      });
     }
     return [];
   }, [matches, allUsers]);
