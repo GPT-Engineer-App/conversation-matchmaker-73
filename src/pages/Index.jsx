@@ -127,9 +127,9 @@ const Index = () => {
         {/* Main content area - Matches */}
         <div className="w-[70%]">
           <Tabs defaultValue="list" className="mb-4">
-            <TabsList className="bg-navy-700">
-              <TabsTrigger value="list" className="data-[state=active]:bg-navy-800 data-[state=active]:text-white">List View</TabsTrigger>
-              <TabsTrigger value="tabs" className="data-[state=active]:bg-navy-800 data-[state=active]:text-white">Tabs View</TabsTrigger>
+            <TabsList>
+              <TabsTrigger value="list">List View</TabsTrigger>
+              <TabsTrigger value="tabs">Tabs View</TabsTrigger>
             </TabsList>
             <TabsContent value="list">
               {/* Match summaries */}
@@ -167,7 +167,6 @@ export default Index;
 
 const MatchesTabs = ({ matches }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const { data: matchedUserDetails } = useMatchedUserDetails(matches[currentIndex]?.matched_user_id);
 
   const nextMatch = () => {
     setCurrentIndex((prevIndex) => (prevIndex + 1) % matches.length);
@@ -183,59 +182,41 @@ const MatchesTabs = ({ matches }) => {
     </div>;
   }
 
-  const currentMatch = matches[currentIndex];
-
   return (
     <div className="flex flex-col">
-      <div className="relative w-full h-[600px] bg-navy-900 rounded-lg overflow-hidden mb-4">
-        <Card className="w-full h-full bg-navy-800 text-white p-6 overflow-y-auto shadow-xl">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center">
-              <Avatar className="w-16 h-16 mr-4">
-                <AvatarImage src={matchedUserDetails?.image_url || "/placeholder.svg"} alt={matchedUserDetails?.name} />
-                <AvatarFallback>{matchedUserDetails?.name?.charAt(0) || 'U'}</AvatarFallback>
-              </Avatar>
-              <div>
-                <h2 className="text-2xl font-bold">{matchedUserDetails?.name}</h2>
-                <p className="text-lg">{matchedUserDetails?.current_title}</p>
-                <p className="text-sm">{matchedUserDetails?.company_name}</p>
-              </div>
-            </div>
-            <div className="text-right">
-              <p className="text-3xl font-bold text-blue-400">{currentMatch.matching_score}</p>
-              <p className="text-sm">Match Score</p>
-              <p className="text-sm">{matchedUserDetails?.location}</p>
-            </div>
-          </div>
-          <div className="mb-4">
-            <h3 className="text-xl font-semibold mb-2">Potential Collaboration</h3>
-            <p>{currentMatch.potential_collaboration}</p>
-          </div>
-          <div className="mb-4">
-            <h3 className="text-xl font-semibold mb-2">Explanation</h3>
-            <p>{currentMatch.explanation}</p>
-          </div>
-          <div className="mb-4">
-            <h3 className="text-xl font-semibold mb-2">Industry</h3>
-            <p>{matchedUserDetails?.industry}</p>
-          </div>
-          <div className="flex justify-end mt-4">
-            <Dialog>
-              <DialogTrigger asChild>
-                <Button size="sm" className="mr-2">View Full Profile</Button>
-              </DialogTrigger>
-              <DialogContent className="w-11/12 max-w-4xl h-[90vh] max-h-[90vh]">
-                <ScrollArea className="h-full pr-4">
-                  <div className="p-6">
-                    <FullProfileContent match={currentMatch} matchedUserDetails={matchedUserDetails} />
-                  </div>
-                </ScrollArea>
-              </DialogContent>
-            </Dialog>
-            <Button size="sm" className="mr-2">Connect</Button>
-            <Button size="sm" variant="outline" as="a" href={matchedUserDetails?.linkedin_url} target="_blank" rel="noopener noreferrer">LinkedIn Profile</Button>
-          </div>
-        </Card>
+      <div className="relative w-full h-[600px] bg-gray-900 rounded-lg overflow-hidden mb-4 perspective-1000">
+        {matches.map((match, index) => {
+          const offset = index - currentIndex;
+          const isActive = offset === 0;
+          const zIndex = matches.length - Math.abs(offset);
+          
+          return (
+            <motion.div
+              key={match.id}
+              className="absolute top-0 left-0 w-full h-full"
+              initial={{ opacity: 0, scale: 0.8, zIndex }}
+              animate={{
+                opacity: isActive ? 1 : 0.7,
+                scale: isActive ? 1 : 0.9,
+                zIndex,
+                x: `${offset * 5}%`,
+                y: `${Math.abs(offset) * 2}%`,
+                rotateY: `${offset * -5}deg`,
+              }}
+              transition={{ duration: 0.5 }}
+            >
+              <Card className={`w-full h-full ${isActive ? 'bg-gray-800' : 'bg-gray-700'} text-white p-6 overflow-y-auto shadow-xl`}>
+                <h2 className="text-2xl font-bold mb-4">{match.matched_user?.name}</h2>
+                <p className="text-lg mb-2">{match.matched_user?.current_title}</p>
+                <p className="text-lg mb-4">{match.matched_user?.company_name}</p>
+                <p className="text-xl font-semibold mb-2">Match Score: {match.matching_score}</p>
+                <p className="mb-4">{match.explanation}</p>
+                <p className="font-semibold mb-2">Potential Collaboration:</p>
+                <p className="mb-4">{match.potential_collaboration}</p>
+              </Card>
+            </motion.div>
+          );
+        })}
       </div>
       <div className="flex justify-center items-center space-x-4">
         <Button onClick={prevMatch} variant="secondary"><ChevronLeft /></Button>
