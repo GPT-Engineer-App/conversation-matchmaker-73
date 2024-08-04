@@ -95,8 +95,10 @@ const Index = () => {
                   <p className="text-sm text-gray-600">{match.matchedUserDetails?.location}</p>
                 </div>
               </div>
-              <p className="mb-2 text-sm"><strong>Industry:</strong> {match.matchedUserDetails?.industry}</p>
-              <p className="mb-2 text-sm"><strong>Expertise:</strong> {match.matchedUserDetails?.areas_of_expertise?.slice(0, 3).join(', ')}</p>
+              <div className="flex mb-2">
+                <p className="text-sm flex-1"><strong>Location:</strong> {match.matchedUserDetails?.location}</p>
+                <p className="text-sm flex-1"><strong>AI Offerings:</strong> {match.matchedUserDetails?.ai_solution_offerings}</p>
+              </div>
               <p className="mb-2"><strong>Potential Collaboration:</strong> {match.potential_collaboration}</p>
               <div className="flex justify-end mt-4">
                 <Button size="sm" className="mr-2">View Full Profile</Button>
