@@ -48,7 +48,7 @@ const Index = () => {
       <div className="flex flex-1 p-4">
         {/* Left sidebar - User Profile */}
         <div className="w-[25%] mr-4 space-y-4">
-          <Card className="p-4 shadow-lg bg-white rounded-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+          <Card className="p-4 shadow-lg bg-white rounded-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:scale-105 border border-gray-200 hover:border-gray-300">
             <div className="flex flex-col items-center">
               <Avatar className="w-24 h-24 mb-2">
                 <AvatarImage src={user.image_url || "/placeholder.svg"} alt={user.name} />
@@ -59,7 +59,7 @@ const Index = () => {
             </div>
           </Card>
           
-          <Card className="p-4 shadow-lg bg-white rounded-lg space-y-4 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+          <Card className="p-4 shadow-lg bg-white rounded-lg space-y-4 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:scale-105 border border-gray-200 hover:border-gray-300">
             <div>
               <p className="font-semibold">Company</p>
               <p>{user.company_name || 'Veloxforce'}</p>
@@ -202,7 +202,7 @@ const MatchCard = ({ match, isExpanded, onExpand }) => {
   }, [isExpanded]);
 
   return (
-    <Card key={match.id} className="mb-4 overflow-hidden cursor-pointer" onClick={onExpand}>
+    <Card key={match.id} className="mb-4 overflow-hidden cursor-pointer transition-all duration-300 hover:shadow-xl hover:scale-102 border border-gray-200 hover:border-gray-300" onClick={onExpand}>
       <div className="p-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center">
