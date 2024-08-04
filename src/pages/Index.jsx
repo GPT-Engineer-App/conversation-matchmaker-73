@@ -166,7 +166,7 @@ const FullProfileContent = ({ match }) => {
   ];
 
   const renderInfoBox = (title, items) => (
-    <div className="bg-white p-6 rounded-lg shadow-lg mb-6 border border-gray-200 transition-all duration-300 ease-in-out hover:shadow-xl w-full">
+    <div className="bg-white p-6 rounded-lg shadow-lg mb-6 border border-gray-200 transition-all duration-300 ease-in-out hover:shadow-xl hover:scale-105 w-full">
       <h3 className="text-xl font-semibold mb-4 text-blue-600">{title}</h3>
       {items.map(({ label, value }) => 
         value && (
