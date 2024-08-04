@@ -95,17 +95,11 @@ const Index = () => {
                   <p className="text-sm text-gray-600">{match.matchedUserDetails?.location}</p>
                 </div>
               </div>
-              <div className="grid grid-cols-2 gap-4 mb-4">
-                <div>
-                  <p className="mb-2 font-semibold">Potential Collaboration</p>
-                  <p className="text-sm">{match.potential_collaboration}</p>
-                </div>
-                <div>
-                  <p className="mb-2 font-semibold">Explanation</p>
-                  <p className="text-sm">{match.explanation}</p>
-                </div>
-              </div>
-              <div className="flex justify-end">
+              <p className="mb-2 font-semibold">Potential Collaboration</p>
+              <p className="mb-4">{match.potential_collaboration}</p>
+              <p className="mb-2 font-semibold">Explanation</p>
+              <p className="mb-4">{match.explanation}</p>
+              <div className="flex justify-end mt-4">
                 <Button size="sm" className="mr-2">View Full Profile</Button>
                 <Button size="sm" className="mr-2">Connect</Button>
                 <Button size="sm" variant="outline" as="a" href={match.matched_user_linkedin} target="_blank" rel="noopener noreferrer">LinkedIn Profile</Button>
