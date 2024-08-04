@@ -172,7 +172,9 @@ const FullProfileContent = ({ match }) => {
         value && (
           <div key={label} className="mb-3">
             <div className="font-medium">{label}</div>
-            <div>{Array.isArray(value) ? value.join(', ') : value}</div>
+            <div className="bg-gray-100 rounded-md p-2 mt-1">
+              {Array.isArray(value) ? value.join(', ') : value}
+            </div>
           </div>
         )
       )}
