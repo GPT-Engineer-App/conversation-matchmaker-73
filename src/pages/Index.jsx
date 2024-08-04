@@ -3,19 +3,24 @@ import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useUserMatchmaker, useMatches } from '@/integrations/supabase';
+import { useUserMatchmaker, useMatches, useUsersMatchmakers } from '@/integrations/supabase';
 
 const Index = () => {
   const userId = '333e05cd-70b9-4455-b15c-928c890bdd02'; // Marius Wilsch's ID
   const { data: user, isLoading: userLoading, error: userError } = useUserMatchmaker(userId);
   const { data: matches, isLoading: matchesLoading, error: matchesError } = useMatches();
+  const { data: allUsers, isLoading: allUsersLoading, error: allUsersError } = useUsersMatchmakers();
 
-  if (userLoading || matchesLoading) return <div>Loading...</div>;
+  if (userLoading || matchesLoading || allUsersLoading) return <div>Loading...</div>;
   if (userError) return <div>Error loading user: {userError.message}</div>;
   if (matchesError) return <div>Error loading matches: {matchesError.message}</div>;
+  if (allUsersError) return <div>Error loading all users: {allUsersError.message}</div>;
   if (!user) return <div>User not found</div>;
 
-  const userMatches = matches?.filter(match => match.user_id === userId) || [];
+  const userMatches = matches?.filter(match => match.user_id === userId).map(match => {
+    const matchedUser = allUsers?.find(u => u.id === match.matched_user_id);
+    return { ...match, matchedUserDetails: matchedUser };
+  }) || [];
   return (
     <div className="min-h-screen flex flex-col bg-gray-100">
       {/* Header */}
@@ -80,18 +85,19 @@ const Index = () => {
                   </Avatar>
                   <div>
                     <h2 className="text-lg font-semibold">{match.matched_user_name}</h2>
-                    <p className="text-sm text-gray-600">{match.current_title}</p>
-                    <p className="text-sm text-gray-600">{match.company_name}</p>
+                    <p className="text-sm text-gray-600">{match.matchedUserDetails?.current_title}</p>
+                    <p className="text-sm text-gray-600">{match.matchedUserDetails?.company_name}</p>
                   </div>
                 </div>
                 <div className="text-right">
-                  <p className="text-lg font-bold text-blue-600">Match Score: {match.matching_score}/10</p>
-                  <p className="text-sm text-gray-600">{match.location}</p>
+                  <p className="text-2xl font-bold text-blue-600">{match.matching_score}</p>
+                  <p className="text-sm text-gray-600">Match Score</p>
+                  <p className="text-sm text-gray-600">{match.matchedUserDetails?.location}</p>
                 </div>
               </div>
-              <p className="mb-2 text-sm"><strong>Industry:</strong> {match.industry}</p>
-              <p className="mb-2 text-sm"><strong>Expertise:</strong> {match.areas_of_expertise?.slice(0, 3).join(', ')}</p>
-              <p className="mb-2"><strong>Why it's a good match:</strong> {match.explanation}</p>
+              <p className="mb-2 text-sm"><strong>Industry:</strong> {match.matchedUserDetails?.industry}</p>
+              <p className="mb-2 text-sm"><strong>Expertise:</strong> {match.matchedUserDetails?.areas_of_expertise?.slice(0, 3).join(', ')}</p>
+              <p className="mb-2"><strong>Potential Collaboration:</strong> {match.potential_collaboration}</p>
               <div className="flex justify-end mt-4">
                 <Button size="sm" className="mr-2">View Full Profile</Button>
                 <Button size="sm" className="mr-2">Connect</Button>
