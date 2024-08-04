@@ -34,9 +34,9 @@ const Index = () => {
       {/* Main content */}
       <div className="flex flex-1 p-4">
         {/* Left sidebar - User Profile */}
-        <div className="w-[25%] mr-4">
+        <div className="w-[25%] mr-4 space-y-4">
           <Card className="p-4 shadow-lg bg-white rounded-lg">
-            <div className="flex flex-col items-center mb-4">
+            <div className="flex flex-col items-center">
               <Avatar className="w-32 h-32 mb-2">
                 <AvatarImage src={user.image_url || "/placeholder.svg"} alt={user.name} />
                 <AvatarFallback>{user.name?.charAt(0) || 'U'}</AvatarFallback>
@@ -44,28 +44,38 @@ const Index = () => {
               <h2 className="text-xl font-semibold">{user.name}</h2>
               <p className="text-sm text-gray-600">{user.current_title}</p>
             </div>
-            <div className="mb-4">
-              <p className="font-bold">Company:</p>
-              <p>{user.company_name || 'Veloxforce'}</p>
-              <p className="font-bold mt-2">Location:</p>
-              <p>{user.location}</p>
-              <p className="font-bold mt-2">Industry:</p>
-              <p>{user.industry || 'AI/Software'}</p>
-            </div>
-            <div className="mb-4">
-              <p className="font-bold">Email:</p>
-              <p>{user.main_email}</p>
-              <p className="font-bold mt-2">LinkedIn:</p>
-              <p><a href={user.linkedin_url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Profile</a></p>
-            </div>
-            <div className="mb-4">
-              <p className="font-bold">Website:</p>
-              <p><a href={user.company_website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Veloxforce</a></p>
-              <p className="font-bold mt-2">Company LinkedIn:</p>
-              <p><a href={user.company_linkedin} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Company Page</a></p>
-            </div>
-            <Button className="w-full">Expand Profile</Button>
           </Card>
+          
+          <Card className="p-4 shadow-lg bg-white rounded-lg">
+            <h3 className="font-bold mb-2">Basic Info</h3>
+            <p><span className="font-semibold">Company:</span> {user.company_name || 'Veloxforce'}</p>
+            <p><span className="font-semibold">Location:</span> {user.location}</p>
+            <p><span className="font-semibold">Industry:</span> {user.industry || 'AI/Software'}</p>
+            <p><span className="font-semibold">Email:</span> {user.main_email}</p>
+            <p><span className="font-semibold">LinkedIn:</span> <a href={user.linkedin_url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Profile</a></p>
+            <p><span className="font-semibold">Website:</span> <a href={user.company_website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Veloxforce</a></p>
+            <p><span className="font-semibold">Company LinkedIn:</span> <a href={user.company_linkedin} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Company Page</a></p>
+          </Card>
+          
+          <Card className="p-4 shadow-lg bg-white rounded-lg">
+            <h3 className="font-bold mb-2">Key Skills</h3>
+            <ul className="list-disc list-inside">
+              {user.skills?.slice(0, 5).map((skill, index) => (
+                <li key={index}>{skill}</li>
+              ))}
+            </ul>
+          </Card>
+          
+          <Card className="p-4 shadow-lg bg-white rounded-lg">
+            <h3 className="font-bold mb-2">Goals</h3>
+            <ul className="list-disc list-inside">
+              {user.business_goals?.slice(0, 3).map((goal, index) => (
+                <li key={index}>{goal}</li>
+              ))}
+            </ul>
+          </Card>
+          
+          <Button className="w-full">Expand Profile</Button>
         </div>
 
         {/* Main content area - Matches */}
