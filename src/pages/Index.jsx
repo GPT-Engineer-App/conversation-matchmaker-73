@@ -2,9 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { useUserMatchmaker, useGetMatchesByUserId, useMatchedUserDetails } from '@/integrations/supabase';
-import { ChevronRight, ChevronLeft } from 'lucide-react';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Input } from '@/components/ui/input';
@@ -126,30 +124,18 @@ const Index = () => {
 
         {/* Main content area - Matches */}
         <div className="w-[70%]">
-          <Tabs defaultValue="list" className="mb-4">
-            <TabsList>
-              <TabsTrigger value="list">List View</TabsTrigger>
-              <TabsTrigger value="tabs">Tabs View</TabsTrigger>
-            </TabsList>
-            <TabsContent value="list">
-              {/* Match summaries */}
-              {matches && matches.length > 0 ? matches.map((match) => (
-                <MatchCard
-                  key={match.id}
-                  match={match}
-                  isExpanded={match.id === expandedMatchId}
-                  onExpand={() => handleExpand(match.id)}
-                />
-              )) : (
-                <div className="text-center py-8">
-                  <p className="text-lg text-gray-600">No matches found for this user.</p>
-                </div>
-              )}
-            </TabsContent>
-            <TabsContent value="tabs">
-              <MatchesTabs matches={matches} />
-            </TabsContent>
-          </Tabs>
+          {matches && matches.length > 0 ? matches.map((match) => (
+            <MatchCard
+              key={match.id}
+              match={match}
+              isExpanded={match.id === expandedMatchId}
+              onExpand={() => handleExpand(match.id)}
+            />
+          )) : (
+            <div className="text-center py-8">
+              <p className="text-lg text-gray-600">No matches found for this user.</p>
+            </div>
+          )}
         </div>
       </div>
 
@@ -165,67 +151,6 @@ const Index = () => {
 
 export default Index;
 
-const MatchesTabs = ({ matches }) => {
-  const [currentIndex, setCurrentIndex] = useState(0);
-
-  const nextMatch = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % matches.length);
-  };
-
-  const prevMatch = () => {
-    setCurrentIndex((prevIndex) => (prevIndex - 1 + matches.length) % matches.length);
-  };
-
-  if (!matches || matches.length === 0) {
-    return <div className="text-center py-8">
-      <p className="text-lg text-gray-600">No matches found for this user.</p>
-    </div>;
-  }
-
-  return (
-    <div className="flex flex-col">
-      <div className="relative w-full h-[600px] bg-gray-900 rounded-lg overflow-hidden mb-4 perspective-1000">
-        {matches.map((match, index) => {
-          const offset = index - currentIndex;
-          const isActive = offset === 0;
-          const zIndex = matches.length - Math.abs(offset);
-          
-          return (
-            <motion.div
-              key={match.id}
-              className="absolute top-0 left-0 w-full h-full"
-              initial={{ opacity: 0, scale: 0.8, zIndex }}
-              animate={{
-                opacity: isActive ? 1 : 0.7,
-                scale: isActive ? 1 : 0.9,
-                zIndex,
-                x: `${offset * 5}%`,
-                y: `${Math.abs(offset) * 2}%`,
-                rotateY: `${offset * -5}deg`,
-              }}
-              transition={{ duration: 0.5 }}
-            >
-              <Card className={`w-full h-full ${isActive ? 'bg-gray-800' : 'bg-gray-700'} text-white p-6 overflow-y-auto shadow-xl`}>
-                <h2 className="text-2xl font-bold mb-4">{match.matched_user?.name}</h2>
-                <p className="text-lg mb-2">{match.matched_user?.current_title}</p>
-                <p className="text-lg mb-4">{match.matched_user?.company_name}</p>
-                <p className="text-xl font-semibold mb-2">Match Score: {match.matching_score}</p>
-                <p className="mb-4">{match.explanation}</p>
-                <p className="font-semibold mb-2">Potential Collaboration:</p>
-                <p className="mb-4">{match.potential_collaboration}</p>
-              </Card>
-            </motion.div>
-          );
-        })}
-      </div>
-      <div className="flex justify-center items-center space-x-4">
-        <Button onClick={prevMatch} variant="secondary"><ChevronLeft /></Button>
-        <span className="text-sm">{currentIndex + 1} / {matches.length}</span>
-        <Button onClick={nextMatch} variant="secondary"><ChevronRight /></Button>
-      </div>
-    </div>
-  );
-};
 
 const FullProfileContent = ({ match, matchedUserDetails }) => {
   const sharedInterests = [
