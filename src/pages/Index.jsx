@@ -9,10 +9,10 @@ import { Input } from '@/components/ui/input';
 import { motion } from 'framer-motion';
 
 const Index = () => {
-  const [userId, setUserId] = useState('333e05cd-70b9-4455-b15c-928c890bdd02'); // Default to Marius Wilsch's ID
   const [expandedMatchId, setExpandedMatchId] = useState(null);
   const [isFirstLoad, setIsFirstLoad] = useState(true);
 
+  const userId = '333e05cd-70b9-4455-b15c-928c890bdd02'; // Default to Marius Wilsch's ID
   const { data: user, isLoading: userLoading, error: userError } = useUserMatchmaker(userId);
   const { data: matches, isLoading: matchesLoading, error: matchesError } = useGetMatchesByUserId(userId);
 
@@ -54,13 +54,6 @@ const Index = () => {
       <header className="bg-white p-4 shadow-sm">
         <div className="flex items-center justify-between">
           <span className="text-xl font-bold text-blue-600">MatchMaker</span>
-          <Input
-            type="text"
-            placeholder="Enter User ID"
-            value={userId}
-            onChange={(e) => setUserId(e.target.value)}
-            className="w-64"
-          />
         </div>
       </header>
 
