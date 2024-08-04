@@ -35,7 +35,6 @@ const Index = () => {
             <p className="text-sm text-gray-600">{user.current_title}</p>
           </div>
           <Card className="mb-4 p-4 shadow-lg transform hover:scale-105 transition-transform duration-300 bg-white rounded-lg">
-            <h2 className="font-semibold mb-2">Basic Info</h2>
             <p className="font-bold">Company:</p>
             <p>{user.company_name || 'Veloxforce'}</p>
             <p className="font-bold mt-2">Location:</p>
@@ -44,14 +43,12 @@ const Index = () => {
             <p>{user.industry || 'AI/Software'}</p>
           </Card>
           <Card className="mb-4 p-4 shadow-lg transform hover:scale-105 transition-transform duration-300 bg-white rounded-lg">
-            <h2 className="font-semibold mb-2">Contact</h2>
             <p className="font-bold">Email:</p>
             <p>{user.main_email}</p>
             <p className="font-bold mt-2">LinkedIn:</p>
             <p><a href={user.linkedin_url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Profile</a></p>
           </Card>
           <Card className="mb-4 p-4 shadow-lg transform hover:scale-105 transition-transform duration-300 bg-white rounded-lg">
-            <h2 className="font-semibold mb-2">Company</h2>
             <p className="font-bold">Website:</p>
             <p><a href={user.company_website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Veloxforce</a></p>
             <p className="font-bold mt-2">LinkedIn:</p>
