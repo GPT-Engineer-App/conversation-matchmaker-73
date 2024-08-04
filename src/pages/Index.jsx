@@ -11,6 +11,9 @@ import { Input } from '@/components/ui/input';
 
 const Index = () => {
   const [userId, setUserId] = useState('333e05cd-70b9-4455-b15c-928c890bdd02'); // Default to Marius Wilsch's ID
+  const [expandedMatchId, setExpandedMatchId] = useState(null);
+  const [userMatches, setUserMatches] = useState([]);
+
   const { data: user, isLoading: userLoading, error: userError } = useUserMatchmaker(userId);
   const { data: matches, isLoading: matchesLoading, error: matchesError } = useMatches();
   const { data: allUsers, isLoading: allUsersLoading, error: allUsersError } = useUsersMatchmakers();
@@ -24,7 +27,6 @@ const Index = () => {
       setUserMatches(filteredMatches);
     }
   }, [userId, matches, allUsers]);
-  const [expandedMatchId, setExpandedMatchId] = useState(null);
 
   useEffect(() => {
     if (matches && matches.length > 0 && !expandedMatchId) {
@@ -32,15 +34,13 @@ const Index = () => {
     }
   }, [matches, expandedMatchId]);
 
-  if (matchesLoading || allUsersLoading) return <div>Loading...</div>;
-  if (matchesError) return <div>Error loading matches: {matchesError.message}</div>;
-  if (allUsersError) return <div>Error loading all users: {allUsersError.message}</div>;
-
-  const [userMatches, setUserMatches] = useState([]);
-
   const handleExpand = (matchId) => {
     setExpandedMatchId(matchId === expandedMatchId ? null : matchId);
   };
+
+  if (matchesLoading || allUsersLoading) return <div>Loading...</div>;
+  if (matchesError) return <div>Error loading matches: {matchesError.message}</div>;
+  if (allUsersError) return <div>Error loading all users: {allUsersError.message}</div>;
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-100">
