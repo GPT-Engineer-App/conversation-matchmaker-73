@@ -183,32 +183,35 @@ const MatchesTabs = ({ matches }) => {
   }
 
   return (
-    <div className="relative w-full h-[600px] bg-gray-900 rounded-lg overflow-hidden">
-      {matches.map((match, index) => (
-        <motion.div
-          key={match.id}
-          className="absolute top-0 left-0 w-full h-full"
-          initial={{ opacity: 0, scale: 0.8, zIndex: index }}
-          animate={{
-            opacity: index === currentIndex ? 1 : 0.5,
-            scale: index === currentIndex ? 1 : 0.8,
-            zIndex: index === currentIndex ? matches.length : matches.length - index - 1,
-          }}
-          transition={{ duration: 0.5 }}
-        >
-          <Card className="w-full h-full bg-gray-800 text-white p-6 overflow-y-auto">
-            <h2 className="text-2xl font-bold mb-4">{match.matched_user?.name}</h2>
-            <p className="text-lg mb-2">{match.matched_user?.current_title}</p>
-            <p className="text-lg mb-4">{match.matched_user?.company_name}</p>
-            <p className="text-xl font-semibold mb-2">Match Score: {match.matching_score}</p>
-            <p className="mb-4">{match.explanation}</p>
-            <p className="font-semibold mb-2">Potential Collaboration:</p>
-            <p className="mb-4">{match.potential_collaboration}</p>
-          </Card>
-        </motion.div>
-      ))}
-      <div className="absolute bottom-4 left-0 right-0 flex justify-center space-x-4">
+    <div className="flex flex-col">
+      <div className="relative w-full h-[600px] bg-gray-900 rounded-lg overflow-hidden mb-4">
+        {matches.map((match, index) => (
+          <motion.div
+            key={match.id}
+            className="absolute top-0 left-0 w-full h-full"
+            initial={{ opacity: 0, scale: 0.8, zIndex: index }}
+            animate={{
+              opacity: index === currentIndex ? 1 : 0.5,
+              scale: index === currentIndex ? 1 : 0.8,
+              zIndex: index === currentIndex ? matches.length : matches.length - index - 1,
+            }}
+            transition={{ duration: 0.5 }}
+          >
+            <Card className="w-full h-full bg-gray-800 text-white p-6 overflow-y-auto">
+              <h2 className="text-2xl font-bold mb-4">{match.matched_user?.name}</h2>
+              <p className="text-lg mb-2">{match.matched_user?.current_title}</p>
+              <p className="text-lg mb-4">{match.matched_user?.company_name}</p>
+              <p className="text-xl font-semibold mb-2">Match Score: {match.matching_score}</p>
+              <p className="mb-4">{match.explanation}</p>
+              <p className="font-semibold mb-2">Potential Collaboration:</p>
+              <p className="mb-4">{match.potential_collaboration}</p>
+            </Card>
+          </motion.div>
+        ))}
+      </div>
+      <div className="flex justify-center items-center space-x-4">
         <Button onClick={prevMatch} variant="secondary"><ChevronLeft /></Button>
+        <span className="text-sm">{currentIndex + 1} / {matches.length}</span>
         <Button onClick={nextMatch} variant="secondary"><ChevronRight /></Button>
       </div>
     </div>
