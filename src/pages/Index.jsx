@@ -1,15 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useUserMatchmaker, useMatches, useUsersMatchmakers } from '@/integrations/supabase';
+import { ChevronDown, ChevronUp } from 'lucide-react';
 
 const Index = () => {
   const userId = '333e05cd-70b9-4455-b15c-928c890bdd02'; // Marius Wilsch's ID
   const { data: user, isLoading: userLoading, error: userError } = useUserMatchmaker(userId);
   const { data: matches, isLoading: matchesLoading, error: matchesError } = useMatches();
   const { data: allUsers, isLoading: allUsersLoading, error: allUsersError } = useUsersMatchmakers();
+  const [expandedMatchId, setExpandedMatchId] = useState(null);
+
+  const toggleExpand = (matchId) => {
+    setExpandedMatchId(expandedMatchId === matchId ? null : matchId);
+  };
 
   if (userLoading || matchesLoading || allUsersLoading) return <div>Loading...</div>;
   if (userError) return <div>Error loading user: {userError.message}</div>;
@@ -95,10 +101,22 @@ const Index = () => {
                   <p className="text-sm text-gray-600">{match.matchedUserDetails?.location}</p>
                 </div>
               </div>
-              <p className="mb-2 font-semibold">Potential Collaboration</p>
-              <p className="mb-4">{match.potential_collaboration}</p>
-              <p className="mb-2 font-semibold">Explanation</p>
-              <p className="mb-4">{match.explanation}</p>
+              <Button 
+                onClick={() => toggleExpand(match.id)} 
+                variant="ghost" 
+                className="w-full flex justify-between items-center mb-2"
+              >
+                {expandedMatchId === match.id ? 'Hide Details' : 'Show Details'}
+                {expandedMatchId === match.id ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+              </Button>
+              {expandedMatchId === match.id && (
+                <>
+                  <p className="mb-2 font-semibold">Potential Collaboration</p>
+                  <p className="mb-4">{match.potential_collaboration}</p>
+                  <p className="mb-2 font-semibold">Explanation</p>
+                  <p className="mb-4">{match.explanation}</p>
+                </>
+              )}
               <div className="flex justify-end mt-4">
                 <Button size="sm" className="mr-2">View Full Profile</Button>
                 <Button size="sm" className="mr-2">Connect</Button>
