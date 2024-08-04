@@ -1,16 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useUserMatchmaker, useMatches, useUsersMatchmakers } from '@/integrations/supabase';
-import { ChevronDown, ChevronUp, ChevronRight, ChevronLeft } from 'lucide-react';
+import { ChevronRight, ChevronLeft } from 'lucide-react';
 
 const Index = () => {
   const userId = '333e05cd-70b9-4455-b15c-928c890bdd02'; // Marius Wilsch's ID
   const { data: user, isLoading: userLoading, error: userError } = useUserMatchmaker(userId);
   const { data: matches, isLoading: matchesLoading, error: matchesError } = useMatches();
   const { data: allUsers, isLoading: allUsersLoading, error: allUsersError } = useUsersMatchmakers();
+  const [expandedMatchId, setExpandedMatchId] = useState(null);
+
+  useEffect(() => {
+    if (matches && matches.length > 0 && !expandedMatchId) {
+      setExpandedMatchId(matches[0].id);
+    }
+  }, [matches, expandedMatchId]);
 
   if (userLoading || matchesLoading || allUsersLoading) return <div>Loading...</div>;
   if (userError) return <div>Error loading user: {userError.message}</div>;
@@ -22,6 +29,10 @@ const Index = () => {
     const matchedUser = allUsers?.find(u => u.id === match.matched_user_id);
     return { ...match, matchedUserDetails: matchedUser };
   }) || [];
+
+  const handleExpand = (matchId) => {
+    setExpandedMatchId(matchId === expandedMatchId ? null : matchId);
+  };
   return (
     <div className="min-h-screen flex flex-col bg-gray-100">
       {/* Header */}
@@ -97,7 +108,12 @@ const Index = () => {
 
           {/* Match summaries */}
           {userMatches.map((match) => (
-            <MatchCard key={match.id} match={match} />
+            <MatchCard
+              key={match.id}
+              match={match}
+              isExpanded={match.id === expandedMatchId}
+              onExpand={() => handleExpand(match.id)}
+            />
           ))}
         </div>
       </div>
@@ -114,14 +130,12 @@ const Index = () => {
 
 export default Index;
 
-const MatchCard = ({ match }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
-
+const MatchCard = ({ match, isExpanded, onExpand }) => {
   return (
     <Card key={match.id} className="mb-4 overflow-hidden">
       <div className="flex">
         {/* Sidebar */}
-        <div className="w-[5%] bg-gray-100 flex flex-col items-center justify-center cursor-pointer" onClick={() => setIsExpanded(!isExpanded)}>
+        <div className="w-[5%] bg-gray-100 flex flex-col items-center justify-center cursor-pointer" onClick={onExpand}>
           {isExpanded ? (
             <ChevronLeft className="h-6 w-6 text-gray-600" />
           ) : (
