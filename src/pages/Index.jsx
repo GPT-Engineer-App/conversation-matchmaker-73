@@ -12,6 +12,7 @@ const Index = () => {
   const { data: matches, isLoading: matchesLoading, error: matchesError } = useMatches();
   const { data: allUsers, isLoading: allUsersLoading, error: allUsersError } = useUsersMatchmakers();
   const [expandedMatchId, setExpandedMatchId] = useState(null);
+  const [isTransitioning, setIsTransitioning] = useState(false);
 
   useEffect(() => {
     if (matches && matches.length > 0 && !expandedMatchId) {
@@ -31,7 +32,18 @@ const Index = () => {
   }) || [];
 
   const handleExpand = (matchId) => {
-    setExpandedMatchId(matchId === expandedMatchId ? null : matchId);
+    if (isTransitioning) return;
+    setIsTransitioning(true);
+    if (expandedMatchId === matchId) {
+      setExpandedMatchId(null);
+      setTimeout(() => setIsTransitioning(false), 300);
+    } else {
+      setExpandedMatchId(null);
+      setTimeout(() => {
+        setExpandedMatchId(matchId);
+        setIsTransitioning(false);
+      }, 300);
+    }
   };
   return (
     <div className="min-h-screen flex flex-col bg-gray-100">
