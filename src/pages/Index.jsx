@@ -96,6 +96,7 @@ const Index = () => {
                 </div>
               </div>
               <p className="mb-2"><strong>Potential Collaboration:</strong> {match.potential_collaboration}</p>
+              <p className="mb-2"><strong>Explanation:</strong> {match.explanation}</p>
               <div className="flex justify-end mt-4">
                 <Button size="sm" className="mr-2">View Full Profile</Button>
                 <Button size="sm" className="mr-2">Connect</Button>
