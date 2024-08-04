@@ -12,31 +12,27 @@ import { Input } from '@/components/ui/input';
 const Index = () => {
   const [userId, setUserId] = useState('333e05cd-70b9-4455-b15c-928c890bdd02'); // Default to Marius Wilsch's ID
   const [expandedMatchId, setExpandedMatchId] = useState(null);
-  const { data: user, isLoading: userLoading, error: userError } = useUserMatchmaker(userId);
-  const { data: allUsers, isLoading: allUsersLoading, error: allUsersError } = useUsersMatchmakers();
-  const { data: userMatches, isLoading: userMatchesLoading, error: userMatchesError } = useMatches({
-    queryKey: ['matches_matchmaker', userId],
-    queryFn: () => fromSupabase(supabase.from('matches_matchmaker').select('*').eq('user_id', userId)),
-    enabled: !!userId,
-  });
+  const [userMatches, setUserMatches] = useState([]);
 
-  const [processedMatches, setProcessedMatches] = useState([]);
+  const { data: user, isLoading: userLoading, error: userError } = useUserMatchmaker(userId);
+  const { data: matches, isLoading: matchesLoading, error: matchesError } = useMatches();
+  const { data: allUsers, isLoading: allUsersLoading, error: allUsersError } = useUsersMatchmakers();
 
   useEffect(() => {
-    if (userMatches && allUsers) {
-      const processedMatches = userMatches.map(match => {
+    if (matches && allUsers) {
+      const filteredMatches = matches.filter(match => match.user_id === userId).map(match => {
         const matchedUser = allUsers.find(u => u.id === match.matched_user_id);
         return { ...match, matchedUserDetails: matchedUser };
       });
-      setProcessedMatches(processedMatches);
+      setUserMatches(filteredMatches);
     }
-  }, [userId, userMatches, allUsers]);
+  }, [userId, matches, allUsers]);
 
   useEffect(() => {
-    if (processedMatches && processedMatches.length > 0 && !expandedMatchId) {
-      setExpandedMatchId(processedMatches[0].id);
+    if (matches && matches.length > 0 && !expandedMatchId) {
+      setExpandedMatchId(matches[0].id);
     }
-  }, [processedMatches, expandedMatchId]);
+  }, [matches, expandedMatchId]);
 
   const handleExpand = (matchId) => {
     setExpandedMatchId(matchId === expandedMatchId ? null : matchId);
@@ -137,24 +133,14 @@ const Index = () => {
           </Tabs>
 
           {/* Match summaries */}
-          {userMatchesLoading ? (
-            <div className="text-center py-8">
-              <p className="text-lg text-gray-600">Loading matches...</p>
-            </div>
-          ) : userMatchesError ? (
-            <div className="text-center py-8">
-              <p className="text-lg text-red-600">Error loading matches: {userMatchesError.message}</p>
-            </div>
-          ) : processedMatches && processedMatches.length > 0 ? (
-            processedMatches.map((match) => (
-              <MatchCard
-                key={match.id}
-                match={match}
-                isExpanded={match.id === expandedMatchId}
-                onExpand={() => handleExpand(match.id)}
-              />
-            ))
-          ) : (
+          {userMatches.length > 0 ? userMatches.map((match) => (
+            <MatchCard
+              key={match.id}
+              match={match}
+              isExpanded={match.id === expandedMatchId}
+              onExpand={() => handleExpand(match.id)}
+            />
+          )) : (
             <div className="text-center py-8">
               <p className="text-lg text-gray-600">No matches found for this user.</p>
             </div>

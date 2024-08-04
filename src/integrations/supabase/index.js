@@ -96,10 +96,9 @@ const fromSupabase = async (query) => {
 */
 
 // Matches Matchmaker hooks
-export const useMatches = (options = {}) => useQuery({
-    queryKey: options.queryKey || ['matches_matchmaker'],
-    queryFn: options.queryFn || (() => fromSupabase(supabase.from('matches_matchmaker').select('*'))),
-    ...options
+export const useMatches = () => useQuery({
+    queryKey: ['matches_matchmaker'],
+    queryFn: () => fromSupabase(supabase.from('matches_matchmaker').select('*'))
 });
 
 export const useMatch = (matchId) => useQuery({
