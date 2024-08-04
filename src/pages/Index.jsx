@@ -14,6 +14,16 @@ const Index = () => {
   const { data: user, isLoading: userLoading, error: userError } = useUserMatchmaker(userId);
   const { data: matches, isLoading: matchesLoading, error: matchesError } = useMatches();
   const { data: allUsers, isLoading: allUsersLoading, error: allUsersError } = useUsersMatchmakers();
+
+  useEffect(() => {
+    if (matches && allUsers) {
+      const filteredMatches = matches.filter(match => match.user_id === userId).map(match => {
+        const matchedUser = allUsers.find(u => u.id === match.matched_user_id);
+        return { ...match, matchedUserDetails: matchedUser };
+      });
+      setUserMatches(filteredMatches);
+    }
+  }, [userId, matches, allUsers]);
   const [expandedMatchId, setExpandedMatchId] = useState(null);
 
   useEffect(() => {
@@ -26,10 +36,7 @@ const Index = () => {
   if (matchesError) return <div>Error loading matches: {matchesError.message}</div>;
   if (allUsersError) return <div>Error loading all users: {allUsersError.message}</div>;
 
-  const userMatches = matches?.filter(match => match.user_id === userId).map(match => {
-    const matchedUser = allUsers?.find(u => u.id === match.matched_user_id);
-    return { ...match, matchedUserDetails: matchedUser };
-  }) || [];
+  const [userMatches, setUserMatches] = useState([]);
 
   const handleExpand = (matchId) => {
     setExpandedMatchId(matchId === expandedMatchId ? null : matchId);
@@ -126,14 +133,18 @@ const Index = () => {
           </Tabs>
 
           {/* Match summaries */}
-          {userMatches.map((match) => (
+          {userMatches.length > 0 ? userMatches.map((match) => (
             <MatchCard
               key={match.id}
               match={match}
               isExpanded={match.id === expandedMatchId}
               onExpand={() => handleExpand(match.id)}
             />
-          ))}
+          )) : (
+            <div className="text-center py-8">
+              <p className="text-lg text-gray-600">No matches found for this user.</p>
+            </div>
+          )}
         </div>
       </div>
 
