@@ -170,9 +170,9 @@ const FullProfileContent = ({ match }) => {
       <h3 className="text-lg font-semibold mb-2">{title}</h3>
       {items.map(({ label, value }) => 
         value && (
-          <div key={label} className="mb-2">
-            <span className="font-medium">{label}: </span>
-            <span>{Array.isArray(value) ? value.join(', ') : value}</span>
+          <div key={label} className="mb-3">
+            <div className="font-medium">{label}</div>
+            <div>{Array.isArray(value) ? value.join(', ') : value}</div>
           </div>
         )
       )}
@@ -238,9 +238,11 @@ const MatchCard = ({ match, isExpanded, onExpand }) => {
                   <DialogTrigger asChild>
                     <Button size="sm" className="mr-2">View Full Profile</Button>
                   </DialogTrigger>
-                  <DialogContent className="w-4/5 h-3/5 max-w-none max-h-none">
-                    <ScrollArea className="h-full">
-                      <FullProfileContent match={match} />
+                  <DialogContent className="w-4/5 h-[70vh] max-w-none max-h-none">
+                    <ScrollArea className="h-full pr-4" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+                      <div style={{ paddingRight: '17px' }}> {/* Compensate for hidden scrollbar */}
+                        <FullProfileContent match={match} />
+                      </div>
                     </ScrollArea>
                   </DialogContent>
                 </Dialog>
