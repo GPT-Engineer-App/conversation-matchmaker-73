@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
+import { cn } from '@/lib/utils';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useUserMatchmaker, useMatches, useUsersMatchmakers } from '@/integrations/supabase';
 import { ChevronDown, ChevronUp, ChevronRight, ChevronLeft } from 'lucide-react';
@@ -35,7 +36,8 @@ const Index = () => {
       <div className="flex flex-1 p-4">
         {/* Left sidebar - User Profile */}
         <div className="w-[25%] mr-4 space-y-4">
-          <Card className="p-4 shadow-lg bg-white rounded-lg">
+          <Card className={cn("p-4 shadow-lg bg-white rounded-lg transform transition-all duration-300 hover:scale-105 hover:shadow-xl", 
+            "before:content-[''] before:absolute before:inset-0 before:bg-gradient-to-r before:from-blue-500/10 before:to-purple-500/10 before:rounded-lg before:opacity-0 before:transition-opacity before:duration-300 hover:before:opacity-100")}>
             <div className="flex flex-col items-center">
               <Avatar className="w-24 h-24 mb-2">
                 <AvatarImage src={user.image_url || "/placeholder.svg"} alt={user.name} />
@@ -46,7 +48,8 @@ const Index = () => {
             </div>
           </Card>
           
-          <Card className="p-4 shadow-lg bg-white rounded-lg space-y-4">
+          <Card className={cn("p-4 shadow-lg bg-white rounded-lg space-y-4 transform transition-all duration-300 hover:scale-105 hover:shadow-xl", 
+            "before:content-[''] before:absolute before:inset-0 before:bg-gradient-to-r before:from-blue-500/10 before:to-purple-500/10 before:rounded-lg before:opacity-0 before:transition-opacity before:duration-300 hover:before:opacity-100")}>
             <div>
               <p className="font-semibold">Company</p>
               <p>{user.company_name || 'Veloxforce'}</p>
@@ -118,7 +121,8 @@ const MatchCard = ({ match }) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
-    <Card key={match.id} className="mb-4 overflow-hidden">
+    <Card key={match.id} className={cn("mb-4 overflow-hidden transform transition-all duration-300 hover:scale-105 hover:shadow-xl", 
+      "before:content-[''] before:absolute before:inset-0 before:bg-gradient-to-r before:from-blue-500/10 before:to-purple-500/10 before:rounded-lg before:opacity-0 before:transition-opacity before:duration-300 hover:before:opacity-100")}>
       <div className="flex">
         {/* Sidebar */}
         <div className="w-[5%] bg-gray-100 flex flex-col items-center justify-center cursor-pointer" onClick={() => setIsExpanded(!isExpanded)}>
