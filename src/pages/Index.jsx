@@ -20,13 +20,21 @@ const Index = () => {
 
   useEffect(() => {
     if (matches && allUsers) {
-      const filteredMatches = matches.filter(match => match.user_id === userId).map(match => {
-        const matchedUser = allUsers.find(u => u.id === match.matched_user_id);
-        return { ...match, matchedUserDetails: matchedUser };
-      });
+      const filteredMatches = matches
+        .filter(match => match.user_id === userId)
+        .map(match => {
+          const matchedUser = allUsers.find(u => u.id === match.matched_user_id);
+          return { ...match, matchedUserDetails: matchedUser };
+        });
       setUserMatches(filteredMatches);
     }
   }, [userId, matches, allUsers]);
+
+  const { data: userMatches, isLoading: userMatchesLoading, error: userMatchesError } = useMatches({
+    queryKey: ['matches_matchmaker', userId],
+    queryFn: () => fromSupabase(supabase.from('matches_matchmaker').select('*').eq('user_id', userId)),
+    enabled: !!userId,
+  });
 
   useEffect(() => {
     if (matches && matches.length > 0 && !expandedMatchId) {
@@ -133,14 +141,24 @@ const Index = () => {
           </Tabs>
 
           {/* Match summaries */}
-          {userMatches.length > 0 ? userMatches.map((match) => (
-            <MatchCard
-              key={match.id}
-              match={match}
-              isExpanded={match.id === expandedMatchId}
-              onExpand={() => handleExpand(match.id)}
-            />
-          )) : (
+          {userMatchesLoading ? (
+            <div className="text-center py-8">
+              <p className="text-lg text-gray-600">Loading matches...</p>
+            </div>
+          ) : userMatchesError ? (
+            <div className="text-center py-8">
+              <p className="text-lg text-red-600">Error loading matches: {userMatchesError.message}</p>
+            </div>
+          ) : userMatches && userMatches.length > 0 ? (
+            userMatches.map((match) => (
+              <MatchCard
+                key={match.id}
+                match={match}
+                isExpanded={match.id === expandedMatchId}
+                onExpand={() => handleExpand(match.id)}
+              />
+            ))
+          ) : (
             <div className="text-center py-8">
               <p className="text-lg text-gray-600">No matches found for this user.</p>
             </div>
