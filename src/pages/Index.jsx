@@ -166,7 +166,7 @@ const FullProfileContent = ({ match }) => {
   ];
 
   const renderInfoBox = (title, items) => (
-    <div className="bg-white p-6 rounded-lg shadow-lg mb-6 border border-gray-200 transition-all duration-300 ease-in-out transform hover:scale-105 hover:rotate-1 hover:shadow-xl w-[85%] mx-auto">
+    <div className="bg-white p-6 rounded-lg shadow-lg mb-6 border border-gray-200 transition-all duration-300 ease-in-out hover:shadow-xl w-full">
       <h3 className="text-xl font-semibold mb-4 text-blue-600">{title}</h3>
       {items.map(({ label, value }) => 
         value && (
@@ -182,7 +182,7 @@ const FullProfileContent = ({ match }) => {
   );
 
   return (
-    <div className="space-y-4 overflow-visible">
+    <div className="space-y-4">
       <h2 className="text-2xl font-bold mb-4">{match.matched_user_name}'s Profile</h2>
       {renderInfoBox('Shared Interests', sharedInterests)}
       {renderInfoBox('Additional Information', additionalInfo)}
@@ -240,9 +240,9 @@ const MatchCard = ({ match, isExpanded, onExpand }) => {
                   <DialogTrigger asChild>
                     <Button size="sm" className="mr-2">View Full Profile</Button>
                   </DialogTrigger>
-                  <DialogContent className="w-[85%] h-[80vh] max-w-none max-h-none">
-                    <ScrollArea className="h-full pr-4 overflow-visible" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
-                      <div style={{ paddingRight: '17px', paddingBottom: '40px' }}> {/* Compensate for hidden scrollbar and add bottom padding */}
+                  <DialogContent className="w-11/12 max-w-4xl h-[90vh] max-h-[90vh]">
+                    <ScrollArea className="h-full pr-4">
+                      <div className="p-6">
                         <FullProfileContent match={match} />
                       </div>
                     </ScrollArea>
