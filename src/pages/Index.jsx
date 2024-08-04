@@ -187,21 +187,25 @@ const MatchesTabs = ({ matches }) => {
       <div className="relative w-full h-[600px] bg-gray-900 rounded-lg overflow-hidden mb-4 perspective-1000">
         {matches.map((match, index) => {
           const offset = index - currentIndex;
+          const isActive = offset === 0;
+          const zIndex = matches.length - Math.abs(offset);
+          
           return (
             <motion.div
               key={match.id}
               className="absolute top-0 left-0 w-full h-full"
-              initial={{ opacity: 0, scale: 0.8, zIndex: matches.length - index }}
+              initial={{ opacity: 0, scale: 0.8, zIndex }}
               animate={{
-                opacity: offset === 0 ? 1 : 0.7,
-                scale: 1 - Math.abs(offset) * 0.1,
-                zIndex: matches.length - Math.abs(offset),
+                opacity: isActive ? 1 : 0.7,
+                scale: isActive ? 1 : 0.9,
+                zIndex,
                 x: `${offset * 5}%`,
+                y: `${Math.abs(offset) * 2}%`,
                 rotateY: `${offset * -5}deg`,
               }}
               transition={{ duration: 0.5 }}
             >
-              <Card className="w-full h-full bg-gray-800 text-white p-6 overflow-y-auto shadow-xl">
+              <Card className={`w-full h-full ${isActive ? 'bg-gray-800' : 'bg-gray-700'} text-white p-6 overflow-y-auto shadow-xl`}>
                 <h2 className="text-2xl font-bold mb-4">{match.matched_user?.name}</h2>
                 <p className="text-lg mb-2">{match.matched_user?.current_title}</p>
                 <p className="text-lg mb-4">{match.matched_user?.company_name}</p>
