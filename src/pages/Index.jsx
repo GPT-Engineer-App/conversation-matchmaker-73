@@ -3,7 +3,7 @@ import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Maximize2 } from 'lucide-react';
-import { useUserMatchmaker, useGetMatchesByUserId, useMatchedUserDetails, useMatchesSubscription } from '@/integrations/supabase';
+import { useUserMatchmaker, useGetMatchesByUserId, useMatchesSubscription } from '@/integrations/supabase';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Input } from '@/components/ui/input';

@@ -300,3 +300,9 @@ export const useDeleteMatchmakerProfile = () => {
         },
     });
 };
+
+// Add the missing function
+export const useGetMatchesByUserId = (userId) => useQuery({
+    queryKey: ['user_matches', userId],
+    queryFn: () => fromSupabase(supabase.from('user_matches').select('*, matched_user:aaa_users!matched_profile_id(*)').eq('profile_id', userId))
+});
