@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 import { useQuery, useMutation, useQueryClient, QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { useEffect } from 'react';
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_PROJECT_URL;
 const supabaseKey = import.meta.env.VITE_SUPABASE_API_KEY;
@@ -301,7 +302,28 @@ export const useDeleteMatchmakerProfile = () => {
     });
 };
 
-// Add the missing function
+// Add the missing functions
+export const useUserMatchmaker = (userId) => useQuery({
+    queryKey: ['user_matchmaker', userId],
+    queryFn: () => fromSupabase(supabase.from('aaa_users').select('*').eq('user_id', userId).single())
+});
+
+export const useMatchesSubscription = () => {
+    const queryClient = useQueryClient();
+    
+    useEffect(() => {
+        const subscription = supabase
+            .from('user_matches')
+            .on('*', (payload) => {
+                queryClient.invalidateQueries('user_matches');
+            })
+            .subscribe();
+
+        return () => {
+            subscription.unsubscribe();
+        };
+    }, [queryClient]);
+};
 export const useGetMatchesByUserId = (userId) => useQuery({
     queryKey: ['user_matches', userId],
     queryFn: () => fromSupabase(supabase.from('user_matches').select('*, matched_user:aaa_users!matched_profile_id(*)').eq('profile_id', userId))

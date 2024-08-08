@@ -271,7 +271,7 @@ const FullProfileContent = ({ match, matchedUserDetails }) => {
 const MatchCard = ({ match, isExpanded, onExpand }) => {
   const [isContentVisible, setIsContentVisible] = React.useState(isExpanded);
   const [isUpdating, setIsUpdating] = React.useState(false);
-  const { data: matchedUserDetails, isLoading: isLoadingDetails } = useMatchedUserDetails(match.matched_user_id);
+  const { data: matchedUserDetails, isLoading: isLoadingDetails } = useUserMatchmaker(match.matched_profile_id);
 
   React.useEffect(() => {
     let timeoutId;
