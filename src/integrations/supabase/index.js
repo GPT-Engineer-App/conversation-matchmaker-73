@@ -304,3 +304,28 @@ export const useDeleteMatchmakerProfile = () => {
         },
     });
 };
+
+// Add the missing hook
+export const useGetMatchesByUserId = (userId) => useQuery({
+    queryKey: ['user_matches', userId],
+    queryFn: () => fromSupabase(supabase.from('user_matches').select('*, matched_user:matchmaker_profiles!matched_profile_id(*)').eq('profile_id', userId)),
+    enabled: !!userId,
+});
+
+// Add a subscription hook for real-time updates
+export const useMatchesSubscription = () => {
+    const queryClient = useQueryClient();
+
+    useEffect(() => {
+        const subscription = supabase
+            .channel('user_matches_changes')
+            .on('postgres_changes', { event: '*', schema: 'public', table: 'user_matches' }, (payload) => {
+                queryClient.invalidateQueries('user_matches');
+            })
+            .subscribe();
+
+        return () => {
+            subscription.unsubscribe();
+        };
+    }, [queryClient]);
+};
