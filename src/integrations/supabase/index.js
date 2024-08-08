@@ -179,6 +179,11 @@ export const useDeleteDiscoveryMeeting = () => {
 };
 
 // AAA Users
+export const useUserMatchmaker = (userId) => useQuery({
+    queryKey: ['user_matchmaker', userId],
+    queryFn: () => fromSupabase(supabase.from('aaa_users').select('*').eq('user_id', userId).single())
+});
+
 export const useAAAUsers = () => useQuery({
     queryKey: ['aaa_users'],
     queryFn: () => fromSupabase(supabase.from('aaa_users').select('*'))
